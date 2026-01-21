@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router';
 import { RouterProvider as Provider } from 'react-router/dom';
+import Admin from '../pages/Admin/Admin';
 import Home from '../pages/Home/Home';
 import Login from '../pages/Login/Login';
 import Summary from '../pages/Summary/SummaryPage';
@@ -18,6 +19,10 @@ export default function RouterProvider() {
     {
       path: PAGE_PATHS.SUMMARY,
       Component: Summary,
+    },
+    {
+      path: PAGE_PATHS.ADMIN,
+      Component: Admin,
     },
   ]);
   return <Provider router={router} />;
