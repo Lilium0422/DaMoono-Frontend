@@ -1,4 +1,4 @@
 export const PAGE_PATHS = {
-  HOME: '/',
-  LOGIN: '/login',
+  LOGIN: '/',
+  HOME: '/home',
 };

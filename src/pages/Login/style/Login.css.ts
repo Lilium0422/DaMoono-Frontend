@@ -14,6 +14,7 @@ export const logo = style({
   width: '300px',
   height: 'auto',
   objectFit: 'contain',
+  marginBottom: '60px',
 });
 
 export const loginButton = style({
@@ -44,6 +45,8 @@ export const guestText = style({
   color: '#999',
   cursor: 'pointer',
   margin: 0,
+  background: 'none',
+  border: 'none',
 
   ':hover': {
     color: '#666',

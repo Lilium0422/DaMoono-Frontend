@@ -7,12 +7,12 @@ import { PAGE_PATHS } from '../shared/config/paths';
 export default function RouterProvider() {
   const router = createBrowserRouter([
     {
-      path: PAGE_PATHS.HOME,
-      Component: Home,
-    },
-    {
       path: PAGE_PATHS.LOGIN,
       Component: Login,
+    },
+    {
+      path: PAGE_PATHS.HOME,
+      Component: Home,
     },
   ]);
   return <Provider router={router} />;

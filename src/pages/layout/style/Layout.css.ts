@@ -8,9 +8,11 @@ export const container = style({
 });
 
 export const content = style({
-  width: '700px',
+  width: '480px',
   maxWidth: '100%',
   minHeight: '100vh',
   backgroundColor: '#ffffff',
   boxShadow: '0 0 20px rgba(0, 0, 0, 0.1)',
+  paddingTop: 'env(safe-area-inset-top)',
+  paddingBottom: 'env(safe-area-inset-bottom)',
 });
