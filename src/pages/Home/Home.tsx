@@ -1,5 +1,5 @@
-import logo from '@/assets/images/logo.png';
 import BottomNav from '@/components/BottomNav';
+import Header from '@/components/Header';
 import { Loading3D } from '@/components/loading';
 import Layout from '../layout/Layout';
 import * as styles from './style/Home.css';
@@ -7,10 +7,9 @@ import * as styles from './style/Home.css';
 export default function Home() {
   return (
     <Layout>
-      <div className={styles.container}>
-        {/* 로고 */}
-        <img src={logo} alt="다무너" className={styles.logo} />
+      <Header />
 
+      <div className={styles.container}>
         <div style={{ width: '200px', height: '200px' }}>
           <Loading3D
             textureUrl="src/assets/images/search-moono.png"
