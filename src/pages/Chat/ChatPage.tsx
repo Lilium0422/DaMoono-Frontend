@@ -10,8 +10,16 @@ import sendButton from '@/assets/images/send-button.svg';
 import BottomNav from '@/components/BottomNav';
 import Layout from '../layout/Layout';
 import MessageCard from './components/MessageCard';
-import { recommendedQuestions } from './data/referenceData';
 import * as styles from './style/ChatPage.css';
+
+// 추천 질문 목록
+const recommendedQuestions = [
+  '구독(유독) 추천',
+  '요금제 추천',
+  '휴대폰 추천',
+  '신규가입 이벤트',
+  '채팅 상담사 연결',
+];
 
 interface Message {
   id: string;
@@ -165,7 +173,7 @@ export default function ChatPage() {
           <div className={styles.recommendedSection}>
             <h3 className={styles.recommendedTitle}>추천질문</h3>
             <div className={styles.questionList}>
-              {recommendedQuestions.map((question) => (
+              {recommendedQuestions.map((question: string) => (
                 <button
                   key={question}
                   type="button"
@@ -181,7 +189,7 @@ export default function ChatPage() {
                 onClick={() => handleQuestionClick('챗봇 메뉴얼')}
               >
                 <img src={infoIcon} alt="정보" className={styles.infoIcon} />
-                메뉴얼
+                챗봇 메뉴얼
               </button>
             </div>
           </div>
