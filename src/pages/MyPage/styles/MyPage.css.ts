@@ -1,6 +1,14 @@
 import { style } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
 
+// MyPage.tsx 스타일
+export const mypage = style({
+  padding: '20px',
+  paddingBottom: '80px',
+  display: 'flex',
+  flexDirection: 'column',
+});
+
 // 마이페이지 상담섹션 컨테이너 스타일
 export const container = style({
   padding: '16px',
@@ -11,7 +19,7 @@ export const container = style({
 export const section = style({
   background: '#FEFDFD',
   padding: '16px',
-  margin: '16px',
+  margin: '16px 16px 32px 16px',
   borderRadius: '10px',
   boxShadow: '0px 2px 2px 0px rgba(0, 0, 0, 0.15)',
 });
@@ -159,16 +167,56 @@ export const icon = style({
 /********************
   이용 꿀팁 스타일 영역
  ********************/
+export const cardList = style({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  margin: '40px 0px 20px',
+  gap: '50px',
+});
+
+export const card = style({
+  border: 'none',
+  background: '#fff',
+  cursor: 'pointer',
+});
+
+export const image = style({
+  width: '100%',
+  height: '80px',
+  objectFit: 'contain',
+  marginBottom: '8px',
+});
+
+export const textArea = style({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '4px',
+});
+
+export const cardTitle = style({
+  fontSize: '13px',
+  fontWeight: 600,
+});
+
+export const description = style({
+  fontSize: '12px',
+  color: '#666',
+  whiteSpace: 'pre-line',
+});
 
 /*************
   로그아웃 버튼
  *************/
 export const logout = style({
-  width: '100%',
-  marginTop: '24px',
-  padding: '12px',
+  width: '100px',
+  margin: '24px auto 50px auto',
+  padding: '12px 0',
   borderRadius: '8px',
   background: '#FFE07A',
   border: 'none',
   fontWeight: 600,
+  textAlign: 'center',
+  boxShadow: '0px 3px 4px 0px rgba(0, 0, 0, 0.25)',
+  cursor: 'pointer',
 });
