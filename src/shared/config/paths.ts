@@ -5,4 +5,5 @@ export const PAGE_PATHS = {
   ADMIN: '/admin',
   PLAN: '/plan',
   SUBSCRIBE: '/subscribe',
+  PERSONALITY_TEST: '/personality-test',
 };
