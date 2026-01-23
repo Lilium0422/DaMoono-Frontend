@@ -6,4 +6,11 @@ export const PAGE_PATHS = {
   PLAN: '/plan',
   SUBSCRIBE: '/subscribe',
   PERSONALITY_TEST: '/personality-test',
+  CHAT: '/chat',
+  CHAT_MANUAL: '/chat/manual',
+  MYPAGE: '/mypage',
+  CUSTOMER_SERVICE: '/customer-service',
+  ARMY_GUIDE: '/customer-service/army',
+  PROXY_GUIDE: '/customer-service/proxy',
+  MINOR_GUIDE: '/customer-service/minor',
 };
