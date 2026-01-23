@@ -4,6 +4,7 @@ import ArmyGuide from '@/pages/Customer/ArmyGuide';
 import CustomerService from '@/pages/Customer/CustomerService';
 import MinorGuide from '@/pages/Customer/MinorGuide';
 import ProxyGuide from '@/pages/Customer/ProxyGuide';
+import MyPage from '@/pages/MyPage/MyPage';
 import Admin from '../pages/Admin/Admin';
 import ChatManualPage from '../pages/Chat/ChatManualPage';
 import ChatPage from '../pages/Chat/ChatPage';
@@ -12,7 +13,6 @@ import Login from '../pages/Login/Login';
 import Plan from '../pages/Plan/Plan';
 import Subscribe from '../pages/Subscribe/Subscribe';
 import Summary from '../pages/Summary/SummaryPage';
-
 import { PAGE_PATHS } from '../shared/config/paths';
 
 export default function RouterProvider() {
@@ -40,6 +40,10 @@ export default function RouterProvider() {
     {
       path: PAGE_PATHS.ADMIN,
       Component: Admin,
+    },
+    {
+      path: PAGE_PATHS.MYPAGE,
+      Component: MyPage,
     },
     {
       path: PAGE_PATHS.CUSTOMER_SERVICE,
