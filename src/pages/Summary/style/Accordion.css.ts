@@ -4,17 +4,18 @@ import { recipe } from '@vanilla-extract/recipes';
 export const accordionWrapper = style({
   border: '0.7px solid #0000000f',
   borderRadius: '15px',
-  backgroundColor: 'white',
-  marginBottom: '12px',
+  margin: '0 24px',
   overflow: 'hidden',
   boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
+  paddingBottom: 5,
+  backgroundColor: '#FEFDFD',
 });
 
 export const header = style({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  padding: '18px 20px',
+  padding: '10px 15px',
   cursor: 'pointer',
 
   // 1. 버튼 기본 스타일 초기화 (핵심!)
@@ -25,11 +26,50 @@ export const header = style({
   textAlign: 'left', // 버튼은 기본적으로 중앙 정렬이라 왼쪽으로 맞춰야 합니다.
 });
 
+export const titleSection = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '10px',
+});
+
+export const imgWrapper = style({
+  width: 35,
+  height: 35,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: 10,
+  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+  backgroundColor: '#FFF7D4',
+});
+
+export const guideIcon = style({
+  width: '40%',
+  height: '40%',
+});
+
+export const textWrapper = style({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+});
+
 export const title = style({
   fontFamily: 'SCDream',
   fontSize: '15px',
   fontWeight: 600,
-  color: '#333',
+});
+
+export const description = style({
+  fontFamily: 'SCDream',
+  fontSize: '10px',
+  fontWeight: 400,
+  color: '777777',
+});
+
+export const highlight = style({
+  color: '#E91685', // 유플러스 메인 핑크 컬러
+  fontWeight: 500, // 시안처럼 핑크색 부분만 살짝 더 두껍게 하면 가독성이 좋아집니다
 });
 
 export const chevron = recipe({
@@ -49,7 +89,6 @@ export const content = recipe({
     maxHeight: 0,
     overflow: 'hidden',
     transition: 'max-height 0.3s ease-in-out',
-    backgroundColor: '#FAFAFA', // 펼쳐졌을 때 배경색 차별화
   },
   variants: {
     open: {
@@ -86,6 +125,19 @@ export const stepNumber = style({
 });
 
 export const stepText = style({
+  fontFamily: 'SCDream',
+  fontSize: '14px',
+  lineHeight: '1.5',
+  color: '#444',
+});
+
+export const titleWrapper = style({
+  fontFamily: 'SCDream',
+  fontSize: '14px',
+  lineHeight: '1.5',
+  color: '#444',
+});
+export const mas = style({
   fontFamily: 'SCDream',
   fontSize: '14px',
   lineHeight: '1.5',
