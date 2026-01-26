@@ -26,13 +26,13 @@ export const header = style({
   textAlign: 'left', // 버튼은 기본적으로 중앙 정렬이라 왼쪽으로 맞춰야 합니다.
 });
 
-export const titleSection = style({
+export const headerSection = style({
   display: 'flex',
   alignItems: 'center',
   gap: '10px',
 });
 
-export const imgWrapper = style({
+export const iconWrapper = style({
   width: 35,
   height: 35,
   display: 'flex',
@@ -54,7 +54,7 @@ export const textWrapper = style({
   justifyContent: 'center',
 });
 
-export const title = style({
+export const guideTitle = style({
   fontFamily: 'SCDream',
   fontSize: '15px',
   fontWeight: 600,
@@ -99,10 +99,26 @@ export const content = recipe({
 });
 
 export const contentInner = style({
-  padding: '20px',
+  padding: '5px 20px',
   display: 'flex',
   flexDirection: 'column',
   gap: '12px',
+});
+
+export const titleWrapper = style({
+  display: 'flex',
+  alignItems: 'center',
+});
+
+export const mascotImg = style({
+  width: 70,
+});
+
+export const contentTitle = style({
+  fontFamily: 'SCDream',
+  fontSize: '14px',
+  lineHeight: '1.5',
+  color: '#444',
 });
 
 export const stepItem = style({
@@ -125,19 +141,6 @@ export const stepNumber = style({
 });
 
 export const stepText = style({
-  fontFamily: 'SCDream',
-  fontSize: '14px',
-  lineHeight: '1.5',
-  color: '#444',
-});
-
-export const titleWrapper = style({
-  fontFamily: 'SCDream',
-  fontSize: '14px',
-  lineHeight: '1.5',
-  color: '#444',
-});
-export const mas = style({
   fontFamily: 'SCDream',
   fontSize: '14px',
   lineHeight: '1.5',

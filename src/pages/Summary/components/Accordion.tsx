@@ -22,12 +22,12 @@ export default function Accordion({ guides }: GuideData) {
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
       >
-        <div className={s.titleSection}>
-          <div className={s.imgWrapper}>
+        <div className={s.headerSection}>
+          <div className={s.iconWrapper}>
             <img src={GuideIcon} alt="guide" className={s.guideIcon} />
           </div>
           <div className={s.textWrapper}>
-            <p className={s.title}>이용 가이드</p>
+            <p className={s.guideTitle}>이용 가이드</p>
             <p className={s.description}>
               <span className={s.highlight}>AI</span>가 자동으로{' '}
               <span className={s.highlight}>매칭</span>했어요
@@ -44,8 +44,8 @@ export default function Accordion({ guides }: GuideData) {
       <div className={s.content({ open: isOpen })}>
         <div className={s.contentInner}>
           <div className={s.titleWrapper}>
-            <img src={holeMan} alt="holeMan" className={s.mas} />
-            <span className={s.title}>{guides.title}</span>
+            <img src={holeMan} alt="holeMan" className={s.mascotImg} />
+            <span className={s.contentTitle}>{guides.title}</span>
           </div>
 
           {guides.steps.map((step) => (
