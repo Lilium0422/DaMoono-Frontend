@@ -14,8 +14,8 @@ export const PAGE_PATHS = {
   CHAT_MANUAL: '/chat/manual',
   MYPAGE: '/mypage',
   COUNSEL: '/counsel',
-  CUSTOMER_SERVICE: '/customer-service',
-  ARMY_GUIDE: '/customer-service/army',
-  PROXY_GUIDE: '/customer-service/proxy',
-  MINOR_GUIDE: '/customer-service/minor',
+  CUSTOMER_SERVICE: '/customer',
+  ARMY_GUIDE: '/customer/army',
+  PROXY_GUIDE: '/customer/proxy',
+  MINOR_GUIDE: '/customer/minor',
 };
