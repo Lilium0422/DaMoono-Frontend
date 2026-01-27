@@ -5,6 +5,7 @@ import Layout from '@/pages/layout/Layout';
 import * as s from '@/pages/Summary/style/SummaryPage.css';
 import CharacterScene from './CharacterScene';
 import Accordion from './components/Accordion';
+import NextActionCard from './components/NextActionCard';
 import StatusCard from './components/StatusCard';
 import SummaryResultCard from './components/SummaryResultCard';
 import WarningCard from './components/WarningCard';
@@ -167,7 +168,13 @@ const SummaryPage = () => {
         </motion.section>
 
         <motion.section className={s.contentSection} variants={itemVariants}>
-          <Accordion guides={MOCK_SUMMARY_DATA.guides} />
+          <Accordion type="guide" data={MOCK_SUMMARY_DATA.guides} />
+          <Accordion type="tip" data={MOCK_SUMMARY_DATA.tips} />
+          <Accordion type="proposal" data={MOCK_SUMMARY_DATA.proposals} />
+        </motion.section>
+
+        <motion.section className={s.contentSection} variants={itemVariants}>
+          <NextActionCard nextActions={MOCK_SUMMARY_DATA.nextActions} />
         </motion.section>
       </motion.div>
 

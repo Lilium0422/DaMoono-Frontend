@@ -6,9 +6,19 @@ export const accordionWrapper = style({
   borderRadius: '15px',
   margin: '0 24px',
   overflow: 'hidden',
-  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
+  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
   paddingBottom: 5,
   backgroundColor: '#FEFDFD',
+
+  transition: 'all 0.3s ease-in-out',
+
+  selectors: {
+    '&:hover': {
+      transform: 'translateY(-5px)', // 위로 5px 이동
+      boxShadow: '0 0 10px rgba(255, 181, 76, 0.2)', // 은은한 발광 효과
+      cursor: 'pointer', // 클릭 가능하다는 느낌을 줌
+    },
+  },
 });
 
 export const header = style({
@@ -18,12 +28,11 @@ export const header = style({
   padding: '10px 15px',
   cursor: 'pointer',
 
-  // 1. 버튼 기본 스타일 초기화 (핵심!)
   width: '100%',
   background: 'none',
   border: 'none',
   outline: 'none',
-  textAlign: 'left', // 버튼은 기본적으로 중앙 정렬이라 왼쪽으로 맞춰야 합니다.
+  textAlign: 'left',
 });
 
 export const headerSection = style({
@@ -69,7 +78,7 @@ export const description = style({
 
 export const highlight = style({
   color: '#E91685', // 유플러스 메인 핑크 컬러
-  fontWeight: 500, // 시안처럼 핑크색 부분만 살짝 더 두껍게 하면 가독성이 좋아집니다
+  fontWeight: 500,
 });
 
 export const chevron = recipe({
@@ -99,7 +108,7 @@ export const content = recipe({
 });
 
 export const contentInner = style({
-  padding: '5px 20px',
+  padding: '10px 30px',
   display: 'flex',
   flexDirection: 'column',
   gap: '12px',
@@ -108,6 +117,7 @@ export const contentInner = style({
 export const titleWrapper = style({
   display: 'flex',
   alignItems: 'center',
+  gap: 20,
 });
 
 export const mascotImg = style({
@@ -117,8 +127,11 @@ export const mascotImg = style({
 export const contentTitle = style({
   fontFamily: 'SCDream',
   fontSize: '14px',
+  fontWeight: 600,
   lineHeight: '1.5',
-  color: '#444',
+  display: 'inline',
+  paddingRight: '5px',
+  background: 'linear-gradient(to top, #e916873a 40%, transparent 40%)',
 });
 
 export const stepItem = style({
@@ -134,10 +147,10 @@ export const stepNumber = style({
   minWidth: '20px',
   height: '20px',
   borderRadius: '50%',
-  backgroundColor: '#FFDA94', // 헤더와 톤을 맞춘 노란색
+  backgroundColor: '#e916873a', // 헤더와 톤을 맞춘 노란색
   fontSize: '11px',
   fontWeight: 700,
-  color: '#F54A00',
+  color: '#E91685',
 });
 
 export const stepText = style({
