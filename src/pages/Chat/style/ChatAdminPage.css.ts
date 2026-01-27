@@ -254,7 +254,6 @@ export const content = style({
   flex: 1,
   overflowY: 'auto',
   padding: '20px',
-  paddingBottom: '180px',
   backgroundColor: '#FEFDFD',
 });
 
@@ -368,11 +367,8 @@ export const loadingDot = style({
 });
 
 export const logoutContainer = style({
-  position: 'fixed',
-  bottom: 0,
-  left: 0,
-  right: 0,
   padding: '16px 20px',
+  margin: '30px 0',
   backgroundColor: '#fff',
   display: 'flex',
   justifyContent: 'center',
@@ -398,6 +394,42 @@ export const logoutButton = style({
     'screen and (max-width: 480px)': {
       fontSize: '14px',
       padding: '10px 32px',
+    },
+  },
+});
+
+export const endChatCard = style({
+  padding: '12px',
+  backgroundColor: '#fff',
+  borderRadius: '12px',
+  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+  cursor: 'pointer',
+  transition: 'all 0.2s',
+  border: '1px solid #220404',
+  width: '90%',
+  textAlign: 'left',
+});
+
+export const endCounselingBtn = style({
+  padding: '5px 16px',
+  boxShadow: '0 4px 4px rgba(0, 0, 0, 0.1)',
+  borderRadius: '20px',
+  background: `linear-gradient(
+    90deg,
+    rgba(255, 166, 41, 0.2) 0%,
+    rgba(255, 255, 255, 0.2) 36%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.2) 66%,
+    rgba(255, 166, 41, 0.2) 100%
+  )`,
+  color: '#030000',
+  fontWeight: '500',
+  fontSize: '14px',
+  whiteSpace: 'nowrap',
+  '@media': {
+    'screen and (max-width: 480px)': {
+      fontSize: '12px',
+      padding: '4px 12px',
     },
   },
 });

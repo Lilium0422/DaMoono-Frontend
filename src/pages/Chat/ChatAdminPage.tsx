@@ -4,10 +4,13 @@ import { useNavigate, useSearchParams } from 'react-router';
 import chatIcon from '@/assets/images/chat.png';
 import counselingIcon from '@/assets/images/counseling-icon.png';
 import counselingMoono from '@/assets/images/counseling-moono.png';
+import endCounselingIcon from '@/assets/images/end-counseling-icon.png';
 import noCounselingMoono from '@/assets/images/no-counseling-moono.png';
+import consult from '@/assets/images/plus-consult.png';
 import Header from '@/components/Header';
 import { logout } from '@/services/authApi';
 import socketService from '@/services/socketService';
+import Layout from '../layout/Layout';
 import ChatInput from './components/ChatInput';
 import VoiceRecorder, {
   type VoiceRecorderRef,
@@ -163,7 +166,7 @@ export default function ChatAdminPage() {
   };
 
   return (
-    <>
+    <Layout>
       <VoiceRecorder
         ref={voiceRecorderRef}
         onTranscript={(text) => {
@@ -261,6 +264,60 @@ export default function ChatAdminPage() {
                   ))}
                 </div>
               )}
+            </div>
+            <div className={styles.content}>
+              <div className={styles.chatBox}>
+                <div className={styles.chatState}>
+                  <img src={consult} alt="상담사" className={styles.chatIcon} />
+                  <span>완료된 상담</span>
+                </div>
+                {waitingSessions.map((session) => (
+                  <button
+                    type="button"
+                    key={session.sessionId}
+                    onClick={() => handleJoinSession(session.sessionId)}
+                    className={styles.endChatCard}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow =
+                        '0 4px 12px rgba(0, 0, 0, 0.15)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow =
+                        '0 2px 8px rgba(0, 0, 0, 0.1)';
+                    }}
+                  >
+                    <div className={styles.counselingWrapper}>
+                      <div className={styles.counselingIdBox}>
+                        <img
+                          src={endCounselingIcon}
+                          alt="무너"
+                          className={styles.chatIcon}
+                        />
+                        <div>
+                          <p className={styles.counselingId}>
+                            {session.userName || '게스트'}
+                          </p>
+                          <p className={styles.sessionIdSmall}>
+                            ({session.sessionId})
+                          </p>
+                        </div>
+                      </div>
+                      <div className={styles.endCounselingBtn}>상담 완료</div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className={styles.logoutContainer}>
+              <button
+                type="button"
+                className={styles.logoutButton}
+                onClick={handleLogout}
+              >
+                로그아웃
+              </button>
             </div>
           </>
         ) : (
@@ -371,16 +428,6 @@ export default function ChatAdminPage() {
           </>
         )}
       </div>
-
-      <div className={styles.logoutContainer}>
-        <button
-          type="button"
-          className={styles.logoutButton}
-          onClick={handleLogout}
-        >
-          로그아웃
-        </button>
-      </div>
-    </>
+    </Layout>
   );
 }
