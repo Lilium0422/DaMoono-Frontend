@@ -1,24 +1,24 @@
 import { style } from '@vanilla-extract/css';
 
 export const container = style({
-  padding: '20px',
-  paddingTop: '80px',
+  padding: '20px 16px',
+  paddingTop: '80px', // 헤더 높이(약 61px) + 여유 공간
   paddingBottom: '80px',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   minHeight: '100vh',
-  backgroundColor: '#f9fafb',
+  backgroundColor: '#ffffff',
   position: 'relative',
 });
 
 export const gradientBg = style({
   position: 'absolute',
-  top: '61px',
+  top: '61px', // 헤더 높이만큼 아래에서 시작
   left: 0,
   right: 0,
   height: '256px',
-  background: 'linear-gradient(to bottom, #fce7f3, transparent)',
+  background: 'linear-gradient(to bottom, #fef3c7, transparent)',
   pointerEvents: 'none',
   zIndex: 0,
 });
@@ -30,8 +30,30 @@ export const content = style({
   flexDirection: 'column',
   alignItems: 'center',
   width: '100%',
-  maxWidth: '672px',
-  padding: '32px 16px',
+  maxWidth: '400px',
+  padding: '0',
+});
+
+export const headerSection = style({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  width: '100%',
+  marginBottom: '20px',
+  gap: '16px',
+});
+
+export const titleWrapper = style({
+  flex: '0 0 60%',
+  display: 'flex',
+  flexDirection: 'column',
+});
+
+export const characterWrapper = style({
+  flex: '0 0 40%',
+  display: 'flex',
+  justifyContent: 'flex-end',
+  alignItems: 'center',
 });
 
 export const title = style({
@@ -39,8 +61,33 @@ export const title = style({
   fontWeight: '700',
   color: '#333',
   margin: 0,
-  marginBottom: '24px',
-  textAlign: 'center',
+  textAlign: 'left',
+  display: 'flex',
+  flexDirection: 'column',
+  lineHeight: '1.3',
+});
+
+export const titleLine1 = style({
+  display: 'block',
+});
+
+export const titleLine2 = style({
+  display: 'block',
+});
+
+export const headerCharacter = style({
+  width: '100%',
+  maxWidth: '200px',
+  height: 'auto',
+  objectFit: 'contain',
+});
+
+export const currentSubscribeSection = style({
+  width: '100%',
+  marginBottom: '20px',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
 });
 
 export const filterPanel = style({
@@ -48,29 +95,29 @@ export const filterPanel = style({
   top: 0,
   zIndex: 10,
   width: '100%',
-  maxWidth: '288px',
-  marginBottom: '24px',
+  marginBottom: '16px',
   display: 'flex',
-  justifyContent: 'center',
+  justifyContent: 'flex-start',
 });
 
 export const filterControls = style({
   display: 'inline-flex',
-  gap: '16px',
+  gap: '8px',
+  width: '100%',
 });
 
 export const selectBase = style({
-  borderRadius: '6px',
-  border: '1px solid #d1d5db',
+  borderRadius: '8px',
+  border: '1px solid #e5e7eb',
   padding: '8px 12px',
-  backgroundColor: 'rgba(255, 255, 255, 0.3)',
-  backdropFilter: 'blur(4px)',
-  fontSize: '14px',
-  color: '#000',
+  backgroundColor: '#fff',
+  fontSize: '13px',
+  color: '#333',
   width: '100%',
   appearance: 'none',
   textAlign: 'left',
   cursor: 'pointer',
+  fontWeight: '500',
 });
 
 export const selectWrapper = style({
@@ -87,17 +134,70 @@ export const selectIcon = style({
   color: '#6b7280',
 });
 
+export const sortMenu = style({
+  position: 'absolute',
+  top: '100%',
+  left: 0,
+  marginTop: '4px',
+  width: '100%',
+  minWidth: '120px',
+  backgroundColor: '#fff',
+  borderRadius: '8px',
+  border: '1px solid #e5e7eb',
+  boxShadow:
+    '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+  overflow: 'hidden',
+  zIndex: 20,
+});
+
+export const sortMenuItem = style({
+  width: '100%',
+  padding: '12px 16px',
+  backgroundColor: '#fff',
+  border: 'none',
+  borderBottom: '1px solid #f3f4f6',
+  textAlign: 'left',
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  fontSize: '14px',
+  color: '#333',
+  transition: 'background-color 0.2s',
+  ':hover': {
+    backgroundColor: '#f9fafb',
+  },
+  ':last-child': {
+    borderBottom: 'none',
+  },
+});
+
+export const sortMenuItemSelected = style({
+  backgroundColor: '#fef3c7', // 연한 노란색
+  color: '#d97706', // 찐 노란색/주황색
+  fontWeight: '600',
+});
+
+export const checkIcon = style({
+  width: '18px',
+  height: '18px',
+  color: '#f59e0b', // 찐 노란색
+  flexShrink: 0,
+});
+
 export const filterMenu = style({
   position: 'absolute',
   right: 0,
+  top: '100%',
   zIndex: 10,
-  marginTop: '8px',
+  marginTop: '4px',
   width: '288px',
   padding: '16px',
-  borderRadius: '6px',
-  border: '1px solid #d1d5db',
+  borderRadius: '8px',
+  border: '1px solid #e5e7eb',
   backgroundColor: '#fff',
-  boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+  boxShadow:
+    '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
   display: 'flex',
   flexDirection: 'column',
   gap: '16px',
@@ -137,24 +237,24 @@ export const filterButtonActive = style({
 export const subscribeList = style({
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
-  gap: '16px',
+  alignItems: 'stretch',
+  gap: '12px',
   width: '100%',
 });
 
 export const subscribeCard = style({
   width: '100%',
-  maxWidth: '288px',
+  maxWidth: '100%',
   cursor: 'pointer',
-  borderRadius: '16px',
-  border: '1px solid #9ca3af',
+  borderRadius: '12px',
+  border: '1px solid #e5e7eb',
   backgroundColor: '#fff',
-  padding: '20px 28px',
-  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-  transition: 'box-shadow 0.2s',
+  padding: '16px 20px',
+  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+  transition: 'box-shadow 0.2s, border-color 0.2s',
   textAlign: 'left',
   ':hover': {
-    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
   },
 });
 
@@ -261,27 +361,38 @@ export const skeleton = style({
 });
 
 export const currentSubscribeTitle = style({
-  fontSize: '20px',
-  fontWeight: '700',
+  fontSize: '16px',
+  fontWeight: '600',
   color: '#333',
   margin: 0,
   marginBottom: '12px',
-  textAlign: 'center',
+  textAlign: 'left',
+});
+
+export const allSubscribesTitle = style({
+  fontSize: '16px',
+  fontWeight: '600',
+  color: '#333',
+  margin: 0,
+  marginBottom: '12px',
+  marginTop: '24px',
+  textAlign: 'left',
+  width: '100%',
 });
 
 export const currentSubscribeCard = style({
   width: '100%',
-  maxWidth: '288px',
+  maxWidth: '100%',
   cursor: 'pointer',
-  borderRadius: '16px',
-  border: '1px solid #9ca3af',
+  borderRadius: '12px',
+  border: '1px solid #e5e7eb',
   backgroundColor: '#fff',
-  padding: '20px 28px',
-  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+  padding: '16px 20px',
+  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
   transition: 'box-shadow 0.2s, border-color 0.2s',
   textAlign: 'left',
   ':hover': {
-    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
   },
 });
 

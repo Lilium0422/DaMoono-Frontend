@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
+import subscribeHeaderCharacter from '@/assets/images/subscribe-header-character.png';
 import BottomNav from '@/components/BottomNav';
 import Header from '@/components/Header';
-import { Loading3D } from '@/components/loading';
 import Layout from '../layout/Layout';
 import {
   CATEGORY_LABELS,
@@ -103,27 +103,63 @@ function SortFilterPanel({
   setSelectedCategories,
 }: SortFilterPanelProps) {
   const [showFilterMenu, setShowFilterMenu] = useState(false);
+  const [showSortOrderMenu, setShowSortOrderMenu] = useState(false);
+  const [showSortMenu, setShowSortMenu] = useState(false);
+  const sortOrderMenuRef = useRef<HTMLDivElement>(null);
+  const sortMenuRef = useRef<HTMLDivElement>(null);
+  const filterMenuRef = useRef<HTMLDivElement>(null);
+
+  // 외부 클릭 감지
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        sortOrderMenuRef.current &&
+        !sortOrderMenuRef.current.contains(event.target as Node)
+      ) {
+        setShowSortOrderMenu(false);
+      }
+      if (
+        sortMenuRef.current &&
+        !sortMenuRef.current.contains(event.target as Node)
+      ) {
+        setShowSortMenu(false);
+      }
+      if (
+        filterMenuRef.current &&
+        !filterMenuRef.current.contains(event.target as Node)
+      ) {
+        setShowFilterMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className={styles.filterPanel}>
       <div className={styles.filterControls}>
         {/* 정렬 순서 */}
         <div className={styles.selectWrapper} style={{ width: '85px' }}>
-          <select
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc')}
+          <button
+            onClick={() => {
+              setShowSortOrderMenu(!showSortOrderMenu);
+              setShowSortMenu(false);
+              setShowFilterMenu(false);
+            }}
             className={styles.selectBase}
           >
-            <option value="asc">낮은 순</option>
-            <option value="desc">높은 순</option>
-          </select>
+            {sortOrder === 'asc' ? '낮은 순' : '높은 순'}
+          </button>
           <svg
             className={styles.selectIcon}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
             role="img"
-            aria-label="드롭다운 아이콘"
+            aria-label="정렬 순서 선택 메뉴 열기"
           >
             <path
               strokeLinecap="round"
@@ -132,35 +168,83 @@ function SortFilterPanel({
               d="M19 9l-7 7-7-7"
             />
           </svg>
+          {showSortOrderMenu && (
+            <div ref={sortOrderMenuRef} className={styles.sortMenu}>
+              <button
+                className={`${styles.sortMenuItem} ${sortOrder === 'asc' ? styles.sortMenuItemSelected : ''}`}
+                onClick={() => {
+                  setSortOrder('asc');
+                  setShowSortOrderMenu(false);
+                }}
+              >
+                <span>낮은 순</span>
+                {sortOrder === 'asc' && (
+                  <svg
+                    className={styles.checkIcon}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-label="선택됨"
+                    role="img"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                )}
+              </button>
+              <button
+                className={`${styles.sortMenuItem} ${sortOrder === 'desc' ? styles.sortMenuItemSelected : ''}`}
+                onClick={() => {
+                  setSortOrder('desc');
+                  setShowSortOrderMenu(false);
+                }}
+              >
+                <span>높은 순</span>
+                {sortOrder === 'desc' && (
+                  <svg
+                    className={styles.checkIcon}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-label="선택됨"
+                    role="img"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                )}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* 정렬 기준 */}
-        <div className={styles.selectWrapper} style={{ width: '96px' }}>
-          <select
-            value={sortTarget ?? ''}
-            onChange={(e) =>
-              setSortTarget(
-                e.target.value === '' ? null : (e.target.value as SortTarget),
-              )
-            }
+        <div className={styles.selectWrapper} style={{ width: '120px' }}>
+          <button
+            onClick={() => {
+              setShowSortMenu(!showSortMenu);
+              setShowSortOrderMenu(false);
+              setShowFilterMenu(false);
+            }}
             className={styles.selectBase}
           >
-            <option value="" disabled hidden>
-              정렬 기준
-            </option>
-            {Object.entries(SORT_LABELS).map(([key, label]) => (
-              <option key={key} value={key}>
-                {label}
-              </option>
-            ))}
-          </select>
+            {sortTarget ? SORT_LABELS[sortTarget] : '정렬 기준'}
+          </button>
           <svg
             className={styles.selectIcon}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
             role="img"
-            aria-label="드롭다운 아이콘"
+            aria-label="정렬 기준 선택 메뉴 열기"
           >
             <path
               strokeLinecap="round"
@@ -169,12 +253,52 @@ function SortFilterPanel({
               d="M19 9l-7 7-7-7"
             />
           </svg>
+          {showSortMenu && (
+            <div ref={sortMenuRef} className={styles.sortMenu}>
+              {Object.entries(SORT_LABELS).map(([key, label]) => {
+                const isSelected = sortTarget === key;
+                return (
+                  <button
+                    key={key}
+                    className={`${styles.sortMenuItem} ${isSelected ? styles.sortMenuItemSelected : ''}`}
+                    onClick={() => {
+                      setSortTarget(key as SortTarget);
+                      setShowSortMenu(false);
+                    }}
+                  >
+                    <span>{label}</span>
+                    {isSelected && (
+                      <svg
+                        className={styles.checkIcon}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-label="선택됨"
+                        role="img"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* 필터 버튼 */}
         <div className={styles.selectWrapper} style={{ width: '80px' }}>
           <button
-            onClick={() => setShowFilterMenu(!showFilterMenu)}
+            onClick={() => {
+              setShowFilterMenu(!showFilterMenu);
+              setShowSortOrderMenu(false);
+              setShowSortMenu(false);
+            }}
             className={styles.selectBase}
           >
             필터링
@@ -185,7 +309,7 @@ function SortFilterPanel({
             stroke="currentColor"
             viewBox="0 0 24 24"
             role="img"
-            aria-label="드롭다운 아이콘"
+            aria-label="필터링 메뉴 열기"
           >
             <path
               strokeLinecap="round"
@@ -197,7 +321,7 @@ function SortFilterPanel({
 
           {/* 필터 메뉴 */}
           {showFilterMenu && (
-            <div className={styles.filterMenu}>
+            <div ref={filterMenuRef} className={styles.filterMenu}>
               {/* 카테고리 필터 */}
               <div className={styles.filterSection}>
                 <div className={styles.filterSectionTitle}>카테고리</div>
@@ -414,32 +538,24 @@ export default function Subscribe() {
 
         <div className={styles.content} ref={listRef}>
           {/* 헤더 */}
-          <div style={{ marginBottom: '24px' }}>
-            <h1 className={styles.title}>구독 서비스 목록</h1>
-          </div>
-
-          {/* 문어 */}
-          <div
-            style={{ width: '200px', height: '200px', marginBottom: '24px' }}
-          >
-            <Loading3D
-              textureUrl="src/assets/images/search-moono.png"
-              size="lg"
-              floatSpeed={1.8}
-              rotation={0.3}
-            />
+          <div className={styles.headerSection}>
+            <div className={styles.titleWrapper}>
+              <h1 className={styles.title}>
+                <span className={styles.titleLine1}>구독 서비스</span>
+                <span className={styles.titleLine2}>둘러보기</span>
+              </h1>
+            </div>
+            <div className={styles.characterWrapper}>
+              <img
+                src={subscribeHeaderCharacter}
+                alt="구독 서비스 둘러보기 캐릭터"
+                className={styles.headerCharacter}
+              />
+            </div>
           </div>
 
           {/* 현재 사용 중인 구독 */}
-          <div
-            style={{
-              marginBottom: '24px',
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
+          <div className={styles.currentSubscribeSection}>
             <h2 className={styles.currentSubscribeTitle}>현재 사용중인 구독</h2>
             <CurrentSubscribeCard
               subscribe={currentSubscribe}
@@ -457,6 +573,9 @@ export default function Subscribe() {
             selectedCategories={selectedCategories}
             setSelectedCategories={setSelectedCategories}
           />
+
+          {/* 모든 구독 */}
+          <h2 className={styles.allSubscribesTitle}>모든 구독</h2>
 
           {/* 구독 리스트 */}
           <div className={styles.subscribeList}>

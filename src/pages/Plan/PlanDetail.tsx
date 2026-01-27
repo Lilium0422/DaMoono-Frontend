@@ -32,6 +32,7 @@ export default function PlanDetail() {
   const planId = id ? parseInt(id, 10) : null;
   const plan = planId ? MOCK_PLANS.find((p) => p.id === planId) : null;
   const [isFlipped, setIsFlipped] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   // 차트 데이터 계산 (0-100 점수로 정규화)
   const chartData = useMemo(() => {
@@ -277,15 +278,57 @@ export default function PlanDetail() {
         <button
           type="button"
           className={styles.applyButton}
-          onClick={() => {
-            // localStorage에 현재 사용중인 요금제 저장
-            localStorage.setItem('currentPlanId', plan.id.toString());
-            // Plan 페이지로 이동
-            navigate(PAGE_PATHS.PLAN);
-          }}
+          onClick={() => setShowConfirmModal(true)}
         >
           이 요금제 신청하기
         </button>
+
+        {/* 확인 모달 */}
+        {showConfirmModal && (
+          <button
+            type="button"
+            className={styles.modalOverlay}
+            onClick={() => setShowConfirmModal(false)}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') {
+                setShowConfirmModal(false);
+              }
+            }}
+            aria-label="모달 닫기"
+          >
+            <div
+              className={styles.modalContent}
+              role="dialog"
+              onClick={(e) => e.stopPropagation()}
+              onKeyDown={(e) => e.stopPropagation()}
+            >
+              <h3 className={styles.modalTitle}>
+                이 요금제로 신청하시겠습니까?
+              </h3>
+              <div className={styles.modalButtons}>
+                <button
+                  type="button"
+                  className={styles.modalConfirmButton}
+                  onClick={() => {
+                    // localStorage에 현재 사용중인 요금제 저장
+                    localStorage.setItem('currentPlanId', plan.id.toString());
+                    // Plan 페이지로 이동 (변경 신호 전달)
+                    navigate(PAGE_PATHS.PLAN, { state: { planUpdated: true } });
+                  }}
+                >
+                  확인
+                </button>
+                <button
+                  type="button"
+                  className={styles.modalCancelButton}
+                  onClick={() => setShowConfirmModal(false)}
+                >
+                  취소
+                </button>
+              </div>
+            </div>
+          </button>
+        )}
       </div>
 
       <BottomNav />

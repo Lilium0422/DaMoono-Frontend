@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
+import planHeaderCharacter from '@/assets/images/plan-header-character.png';
 import BottomNav from '@/components/BottomNav';
 import Header from '@/components/Header';
-import { Loading3D } from '@/components/loading';
 import { PAGE_PATHS } from '@/shared/config/paths';
 import Layout from '../layout/Layout';
 import { MOCK_PLANS, OTT_IMAGES, OTT_LABELS, SORT_LABELS } from './constants';
@@ -29,7 +29,8 @@ function CurrentPlanCard({
   isCompareMode = false,
   isCompareSelected = false,
   onClick,
-}: CurrentPlanCardProps) {
+  isUpdating,
+}: CurrentPlanCardProps & { isUpdating?: boolean }) {
   const {
     name,
     price,
@@ -44,7 +45,7 @@ function CurrentPlanCard({
     <button
       type="button"
       onClick={() => onClick?.(plan)}
-      className={`${styles.currentPlanCard} ${isSelected ? styles.planCardSelected : ''} ${isCompareMode && isCompareSelected ? styles.planCardCompareSelected : ''}`}
+      className={`${styles.currentPlanCard} ${isSelected ? styles.planCardSelected : ''} ${isCompareMode && isCompareSelected ? styles.planCardCompareSelected : ''} ${isUpdating ? styles.currentPlanCardUpdating : ''}`}
     >
       <div className={styles.planCardHeader}>
         <span className={styles.planProvider}>LG U+</span>
@@ -120,20 +121,57 @@ function SortFilterPanel({
   setSelectedOttList,
 }: SortFilterPanelProps) {
   const [showFilterMenu, setShowFilterMenu] = useState(false);
+  const [showSortMenu, setShowSortMenu] = useState(false);
+  const [showSortOrderMenu, setShowSortOrderMenu] = useState(false);
+  const sortMenuRef = useRef<HTMLDivElement>(null);
+  const sortOrderMenuRef = useRef<HTMLDivElement>(null);
+  const filterMenuRef = useRef<HTMLDivElement>(null);
+
+  // 외부 클릭 시 메뉴 닫기
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        sortMenuRef.current &&
+        !sortMenuRef.current.contains(event.target as Node)
+      ) {
+        setShowSortMenu(false);
+      }
+      if (
+        sortOrderMenuRef.current &&
+        !sortOrderMenuRef.current.contains(event.target as Node)
+      ) {
+        setShowSortOrderMenu(false);
+      }
+      if (
+        filterMenuRef.current &&
+        !filterMenuRef.current.contains(event.target as Node)
+      ) {
+        setShowFilterMenu(false);
+      }
+    };
+
+    if (showSortMenu || showSortOrderMenu || showFilterMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, [showSortMenu, showSortOrderMenu, showFilterMenu]);
 
   return (
     <div className={styles.filterPanel}>
       <div className={styles.filterControls}>
-        <div className={styles.selectWrapper} style={{ width: '85px' }}>
-          <select
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc')}
+        <div className={styles.selectWrapper} style={{ width: '100px' }}>
+          <button
+            onClick={() => {
+              setShowSortOrderMenu(!showSortOrderMenu);
+              setShowSortMenu(false);
+              setShowFilterMenu(false);
+            }}
             className={styles.selectBase}
           >
-            <option value="asc">낮은 순</option>
-            <option value="desc">높은 순</option>
-          </select>
-          {/* 에러 수정: role과 aria-label 추가 */}
+            {sortOrder === 'asc' ? '낮은 순' : '높은 순'}
+          </button>
           <svg
             className={styles.selectIcon}
             fill="none"
@@ -149,28 +187,75 @@ function SortFilterPanel({
               d="M19 9l-7 7-7-7"
             />
           </svg>
+          {showSortOrderMenu && (
+            <div ref={sortOrderMenuRef} className={styles.sortMenu}>
+              <button
+                className={`${styles.sortMenuItem} ${sortOrder === 'asc' ? styles.sortMenuItemSelected : ''}`}
+                onClick={() => {
+                  setSortOrder('asc');
+                  setShowSortOrderMenu(false);
+                }}
+              >
+                <span>낮은 순</span>
+                {sortOrder === 'asc' && (
+                  <svg
+                    className={styles.checkIcon}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-label="선택됨"
+                    role="img"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                )}
+              </button>
+              <button
+                className={`${styles.sortMenuItem} ${sortOrder === 'desc' ? styles.sortMenuItemSelected : ''}`}
+                onClick={() => {
+                  setSortOrder('desc');
+                  setShowSortOrderMenu(false);
+                }}
+              >
+                <span>높은 순</span>
+                {sortOrder === 'desc' && (
+                  <svg
+                    className={styles.checkIcon}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-label="선택됨"
+                    role="img"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                )}
+              </button>
+            </div>
+          )}
         </div>
 
-        <div className={styles.selectWrapper} style={{ width: '96px' }}>
-          <select
-            value={sortTarget ?? ''}
-            onChange={(e) =>
-              setSortTarget(
-                e.target.value === '' ? null : (e.target.value as SortTarget),
-              )
-            }
+        <div className={styles.selectWrapper} style={{ width: '120px' }}>
+          <button
+            onClick={() => {
+              setShowSortMenu(!showSortMenu);
+              setShowSortOrderMenu(false);
+              setShowFilterMenu(false);
+            }}
             className={styles.selectBase}
           >
-            <option value="" disabled hidden>
-              정렬 기준
-            </option>
-            {Object.entries(SORT_LABELS).map(([key, label]) => (
-              <option key={key} value={key}>
-                {label}
-              </option>
-            ))}
-          </select>
-          {/* 에러 수정: role과 aria-label 추가 */}
+            {sortTarget ? SORT_LABELS[sortTarget] : '정렬 기준'}
+          </button>
           <svg
             className={styles.selectIcon}
             fill="none"
@@ -186,11 +271,51 @@ function SortFilterPanel({
               d="M19 9l-7 7-7-7"
             />
           </svg>
+          {showSortMenu && (
+            <div ref={sortMenuRef} className={styles.sortMenu}>
+              {Object.entries(SORT_LABELS).map(([key, label]) => {
+                const isSelected = sortTarget === key;
+                return (
+                  <button
+                    key={key}
+                    className={`${styles.sortMenuItem} ${isSelected ? styles.sortMenuItemSelected : ''}`}
+                    onClick={() => {
+                      setSortTarget(key as SortTarget);
+                      setShowSortMenu(false);
+                    }}
+                  >
+                    <span>{label}</span>
+                    {isSelected && (
+                      <svg
+                        className={styles.checkIcon}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-label="선택됨"
+                        role="img"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         <div className={styles.selectWrapper} style={{ width: '80px' }}>
           <button
-            onClick={() => setShowFilterMenu(!showFilterMenu)}
+            onClick={() => {
+              setShowFilterMenu(!showFilterMenu);
+              setShowSortMenu(false);
+              setShowSortOrderMenu(false);
+            }}
             className={styles.selectBase}
           >
             필터링
@@ -213,7 +338,7 @@ function SortFilterPanel({
           </svg>
 
           {showFilterMenu && (
-            <div className={styles.filterMenu}>
+            <div ref={filterMenuRef} className={styles.filterMenu}>
               <div className={styles.filterSection}>
                 <div className={styles.filterSectionTitle}>네트워크</div>
                 <div className={styles.filterButtons}>
@@ -351,6 +476,7 @@ function PlanCard({
 // 메인 페이지 컴포넌트
 export default function Plan() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [sortTarget, setSortTarget] = useState<SortTarget | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [selectedNetwork, setSelectedNetwork] = useState<NetworkType | null>(
@@ -371,6 +497,7 @@ export default function Plan() {
     }
     return MOCK_PLANS[Math.floor(Math.random() * MOCK_PLANS.length)];
   });
+  const [isUpdatingPlan, setIsUpdatingPlan] = useState(false);
 
   const loadCurrentPlan = useCallback(() => {
     const savedPlanId = localStorage.getItem('currentPlanId');
@@ -386,6 +513,26 @@ export default function Plan() {
     window.addEventListener('focus', loadCurrentPlan);
     return () => window.removeEventListener('focus', loadCurrentPlan);
   }, [loadCurrentPlan]);
+
+  // 요금제 변경 신호 감지
+  useEffect(() => {
+    const planUpdated = (location.state as { planUpdated?: boolean })
+      ?.planUpdated;
+    if (planUpdated) {
+      setIsUpdatingPlan(true);
+      loadCurrentPlan();
+
+      // 700ms 후 효과 제거 (애니메이션 완료 후 클래스 제거)
+      const timer = setTimeout(() => {
+        setIsUpdatingPlan(false);
+      }, 700);
+
+      // location state 초기화
+      navigate(location.pathname, { replace: true, state: {} });
+
+      return () => clearTimeout(timer);
+    }
+  }, [location.state, loadCurrentPlan, navigate, location.pathname]);
 
   const filteredAndSortedPlans = useMemo(() => {
     let filtered = [...MOCK_PLANS];
@@ -433,40 +580,41 @@ export default function Plan() {
       <div className={styles.container}>
         <div className={styles.gradientBg} />
         <div className={styles.content} ref={listRef}>
-          <h1 className={styles.title}>요금제 목록</h1>
-          <div
-            style={{ width: '200px', height: '200px', marginBottom: '24px' }}
-          >
-            <Loading3D
-              textureUrl="src/assets/images/search-moono.png"
-              size="lg"
-              floatSpeed={1.8}
-            />
+          <div className={styles.headerSection}>
+            <div className={styles.titleWrapper}>
+              <h1 className={styles.title}>
+                <span className={styles.titleLine1}>요금제 서비스</span>
+                <span className={styles.titleLine2}>둘러보기</span>
+              </h1>
+            </div>
+            <div className={styles.characterWrapper}>
+              <img
+                src={planHeaderCharacter}
+                alt="요금제 비교 캐릭터"
+                className={styles.headerCharacter}
+              />
+            </div>
           </div>
           <button
             className={`${styles.compareButton} ${isCompareMode ? styles.compareButtonActive : ''}`}
             onClick={() => setIsCompareMode(!isCompareMode)}
           >
-            요금제 한눈에 비교하기!! click!!
+            간편하게 요금제 비교하기
           </button>
-          <div
-            style={{
-              marginBottom: '24px',
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <h2 className={styles.currentPlanTitle}>현재 사용중인 요금제</h2>
+          <div className={styles.currentPlanSection}>
+            <h2 className={styles.currentPlanTitle}>
+              현재 사용중인 요금제 서비스
+            </h2>
             <CurrentPlanCard
               plan={currentPlan}
               isSelected={selectedPlanId === currentPlan.id}
               isCompareMode={isCompareMode}
               isCompareSelected={comparePlans.includes(currentPlan.id)}
+              isUpdating={isUpdatingPlan}
               onClick={handlePlanClick}
             />
           </div>
+          <h2 className={styles.allPlansTitle}>요금제 전체보기</h2>
           <SortFilterPanel
             selectedNetwork={selectedNetwork}
             setSelectedNetwork={setSelectedNetwork}

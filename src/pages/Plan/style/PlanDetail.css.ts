@@ -18,6 +18,7 @@ export const header = style({
   display: 'flex',
   alignItems: 'center',
   gap: '16px',
+  position: 'relative',
 });
 
 export const backButton = style({
@@ -27,6 +28,9 @@ export const backButton = style({
   color: '#666',
   cursor: 'pointer',
   padding: '8px',
+  position: 'absolute',
+  left: 0,
+  zIndex: 1,
   ':hover': {
     color: '#333',
   },
@@ -37,6 +41,8 @@ export const title = style({
   fontWeight: '700',
   color: '#333',
   margin: 0,
+  textAlign: 'center',
+  width: '100%',
 });
 
 export const cardContainer = style({
@@ -65,6 +71,7 @@ export const card = style({
   backfaceVisibility: 'hidden',
   transformStyle: 'preserve-3d',
   transition: 'transform 0.6s',
+  textAlign: 'left',
 });
 
 export const cardBack = style({
@@ -80,6 +87,7 @@ export const cardBack = style({
   backfaceVisibility: 'hidden',
   transformStyle: 'preserve-3d',
   transition: 'transform 0.6s',
+  textAlign: 'left',
 });
 
 export const chartContainer = style({
@@ -193,4 +201,76 @@ export const errorMessage = style({
   fontSize: '18px',
   color: '#6b7280',
   marginBottom: '24px',
+});
+
+export const modalOverlay = style({
+  border: 'none',
+  background: 'none',
+  padding: 0,
+  margin: 0,
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  zIndex: 1000,
+});
+
+export const modalContent = style({
+  backgroundColor: '#fff',
+  borderRadius: '16px',
+  padding: '24px',
+  width: '90%',
+  maxWidth: '320px',
+  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)',
+});
+
+export const modalTitle = style({
+  fontSize: '18px',
+  fontWeight: '700',
+  color: '#333',
+  margin: 0,
+  marginBottom: '24px',
+  textAlign: 'center',
+});
+
+export const modalButtons = style({
+  display: 'flex',
+  gap: '12px',
+});
+
+export const modalCancelButton = style({
+  flex: 1,
+  padding: '12px',
+  backgroundColor: '#f3f4f6',
+  color: '#333',
+  border: 'none',
+  borderRadius: '8px',
+  fontSize: '16px',
+  fontWeight: '600',
+  cursor: 'pointer',
+  transition: 'background-color 0.2s',
+  ':hover': {
+    backgroundColor: '#e5e7eb',
+  },
+});
+
+export const modalConfirmButton = style({
+  flex: 1,
+  padding: '12px',
+  backgroundColor: '#E91685',
+  color: '#fff',
+  border: 'none',
+  borderRadius: '8px',
+  fontSize: '16px',
+  fontWeight: '600',
+  cursor: 'pointer',
+  transition: 'background-color 0.2s',
+  ':hover': {
+    backgroundColor: '#d11473',
+  },
 });

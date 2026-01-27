@@ -18,6 +18,7 @@ export const header = style({
   display: 'flex',
   alignItems: 'center',
   gap: '16px',
+  position: 'relative',
 });
 
 export const backButton = style({
@@ -37,6 +38,10 @@ export const title = style({
   fontWeight: '700',
   color: '#333',
   margin: 0,
+  position: 'absolute',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  textAlign: 'center',
 });
 
 export const cardsContainer = style({
