@@ -1,7 +1,7 @@
 # 다무너 (DaMoono) 🐙
 
 ### AI 기반 통신사 요금제 추천 및 실시간 상담 서비스
-**다무너(DaMoono)**는
+**다무너(DaMoono)** 는
 사용자의 통신 사용 패턴과 성향을 분석해 최적의 요금제를 추천하고,
 AI 챗봇과 실시간 상담사 연결을 결합하여
 **상담 요약까지 제공하는 통합 요금제 상담 서비스**입니다.
@@ -88,10 +88,10 @@ LangChain + OpenAI API
 ## 🔄 플로우 차트
 
 **Service Flow**
-(이미지 삽입)
+<img width="4377" height="2305" alt="플로우 차트 - service" src="https://github.com/user-attachments/assets/89d17c43-6c39-49d6-b41c-83177ce71b56" />
 
 **Admin Flow**
-(이미지 삽입)
+<img width="3744" height="1610" alt="플로우 차트 - admin" src="https://github.com/user-attachments/assets/b468dd41-a5fc-4a43-94be-ffee510e6b6b" />
 
 **상담 흐름**
 
