@@ -5,6 +5,12 @@ class SocketService {
   private sessionId: string | null = null;
 
   connect() {
+    // 이미 연결되어 있으면 재연결하지 않음
+    if (this.socket?.connected) {
+      console.log('🔌 Socket 이미 연결됨:', this.socket.id);
+      return this.socket;
+    }
+
     const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
     this.socket = io(apiUrl);
 

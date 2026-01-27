@@ -5,10 +5,8 @@ import chatIcon from '@/assets/images/chat.png';
 import counselingIcon from '@/assets/images/counseling-icon.png';
 import counselingMoono from '@/assets/images/counseling-moono.png';
 import noCounselingMoono from '@/assets/images/no-counseling-moono.png';
-import BottomNav from '@/components/BottomNav';
 import Header from '@/components/Header';
 import socketService from '@/services/socketService';
-import Layout from '../layout/Layout';
 import ChatInput from './components/ChatInput';
 import VoiceRecorder, {
   type VoiceRecorderRef,
@@ -138,6 +136,14 @@ export default function ChatAdminPage() {
     navigate(`/chat/admin?session=${selectedSessionId}`);
   };
 
+  const handleLogout = () => {
+    if (confirm('로그아웃 하시겠습니까?')) {
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userRole');
+      navigate('/login');
+    }
+  };
+
   const formatTime = (date: Date) => {
     const hours = date.getHours();
     const minutes = date.getMinutes();
@@ -147,7 +153,7 @@ export default function ChatAdminPage() {
   };
 
   return (
-    <Layout>
+    <>
       <VoiceRecorder
         ref={voiceRecorderRef}
         onTranscript={(text) => {
@@ -356,7 +362,15 @@ export default function ChatAdminPage() {
         )}
       </div>
 
-      <BottomNav />
-    </Layout>
+      <div className={styles.logoutContainer}>
+        <button
+          type="button"
+          className={styles.logoutButton}
+          onClick={handleLogout}
+        >
+          로그아웃
+        </button>
+      </div>
+    </>
   );
 }

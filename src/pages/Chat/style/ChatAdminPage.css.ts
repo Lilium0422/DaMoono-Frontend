@@ -366,3 +366,38 @@ export const loadingDot = style({
     },
   },
 });
+
+export const logoutContainer = style({
+  position: 'fixed',
+  bottom: 0,
+  left: 0,
+  right: 0,
+  padding: '16px 20px',
+  backgroundColor: '#fff',
+  display: 'flex',
+  justifyContent: 'center',
+  zIndex: 100,
+});
+
+export const logoutButton = style({
+  fontFamily: 'S-Core Dream',
+  fontSize: '16px',
+  fontWeight: 500,
+  color: '#FF4444',
+  backgroundColor: '#fff',
+  border: '1px solid #FF4444',
+  borderRadius: '8px',
+  padding: '12px 40px',
+  cursor: 'pointer',
+  transition: 'all 0.3s',
+  ':hover': {
+    backgroundColor: '#FF4444',
+    color: '#fff',
+  },
+  '@media': {
+    'screen and (max-width: 480px)': {
+      fontSize: '14px',
+      padding: '10px 32px',
+    },
+  },
+});
