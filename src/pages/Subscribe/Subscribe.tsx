@@ -697,17 +697,41 @@ export default function Subscribe() {
           {/* 현재 사용 중인 구독 */}
           <div className={styles.currentSubscribeSection}>
             <h2 className={styles.currentSubscribeTitle}>현재 사용중인 구독</h2>
-            {currentSubscribe ? (
-              <CurrentSubscribeCard
-                subscribe={currentSubscribe}
-                isSelected={selectedSubscribeId === currentSubscribe.id}
-                isUpdating={isUpdatingSubscribe}
-                isDisabled={isAuthenticated === false}
-                onClick={handleSubscribeClick}
-              />
-            ) : (
-              <div className={styles.loadingMessage}>로딩 중...</div>
-            )}
+            {(() => {
+              const hasSavedSubscribe =
+                !!localStorage.getItem('currentSubscribeId');
+              if (!hasSavedSubscribe) {
+                return (
+                  <div
+                    className={`${styles.currentSubscribeCard} ${styles.currentSubscribeCardDisabled}`}
+                  >
+                    <div className={styles.disabledContent}>
+                      <img
+                        src={nologinImage}
+                        alt="로그인 필요"
+                        className={styles.disabledImage}
+                      />
+                      <div className={styles.disabledText}>
+                        <span>현재 사용중인 서비스가 없거나</span>
+                        <span>로그인이 되어있지 않습니다.</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+              if (currentSubscribe) {
+                return (
+                  <CurrentSubscribeCard
+                    subscribe={currentSubscribe}
+                    isSelected={selectedSubscribeId === currentSubscribe.id}
+                    isUpdating={isUpdatingSubscribe}
+                    isDisabled={isAuthenticated === false}
+                    onClick={handleSubscribeClick}
+                  />
+                );
+              }
+              return <div className={styles.loadingMessage}>로딩 중...</div>;
+            })()}
           </div>
 
           {/* 정렬/필터 패널 */}

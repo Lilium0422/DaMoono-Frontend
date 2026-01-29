@@ -822,19 +822,42 @@ export default function Plan() {
             <h2 className={styles.currentPlanTitle}>
               현재 사용중인 요금제 서비스
             </h2>
-            {currentPlan ? (
-              <CurrentPlanCard
-                plan={currentPlan}
-                isSelected={selectedPlanId === currentPlan.id}
-                isCompareMode={isCompareMode}
-                isCompareSelected={comparePlans.includes(currentPlan.id)}
-                isUpdating={isUpdatingPlan}
-                isDisabled={isAuthenticated === false}
-                onClick={handlePlanClick}
-              />
-            ) : (
-              <div className={styles.loadingMessage}>로딩 중...</div>
-            )}
+            {(() => {
+              const hasSavedPlan = !!localStorage.getItem('currentPlanId');
+              if (!hasSavedPlan) {
+                return (
+                  <div
+                    className={`${styles.currentPlanCard} ${styles.currentPlanCardDisabled}`}
+                  >
+                    <div className={styles.disabledContent}>
+                      <img
+                        src={nologinImage}
+                        alt="로그인 필요"
+                        className={styles.disabledImage}
+                      />
+                      <div className={styles.disabledText}>
+                        <span>현재 사용중인 서비스가 없거나</span>
+                        <span>로그인이 되어있지 않습니다.</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+              if (currentPlan) {
+                return (
+                  <CurrentPlanCard
+                    plan={currentPlan}
+                    isSelected={selectedPlanId === currentPlan.id}
+                    isCompareMode={isCompareMode}
+                    isCompareSelected={comparePlans.includes(currentPlan.id)}
+                    isUpdating={isUpdatingPlan}
+                    isDisabled={isAuthenticated === false}
+                    onClick={handlePlanClick}
+                  />
+                );
+              }
+              return <div className={styles.loadingMessage}>로딩 중...</div>;
+            })()}
           </div>
           <h2 className={styles.allPlansTitle}>요금제 전체보기</h2>
           {isLoading ? (
