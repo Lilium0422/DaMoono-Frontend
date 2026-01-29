@@ -17,6 +17,10 @@ import type {
   SortTarget,
 } from './types';
 
+// Temporary flag: force using mock data for local testing.
+// Set to false to use real backend API.
+const USE_TEMP_MOCK = true;
+
 // 현재 사용 중인 요금제 카드 컴포넌트
 interface CurrentPlanCardProps {
   plan: PlanType;
@@ -561,6 +565,32 @@ export default function Plan() {
       try {
         setIsLoading(true);
         setError(null);
+        if (USE_TEMP_MOCK) {
+          // Use mock plans for local testing
+          const shuffledMockPlans = [...MOCK_PLANS].sort(
+            () => Math.random() - 0.5,
+          );
+          setPlans(shuffledMockPlans);
+          const savedPlanId = localStorage.getItem('currentPlanId');
+          if (savedPlanId && MOCK_PLANS.length > 0) {
+            const planId = parseInt(savedPlanId, 10);
+            const savedPlan = MOCK_PLANS.find((p) => p.id === planId);
+            if (savedPlan) {
+              setCurrentPlan(savedPlan);
+            } else {
+              setCurrentPlan(
+                MOCK_PLANS[Math.floor(Math.random() * MOCK_PLANS.length)],
+              );
+            }
+          } else if (MOCK_PLANS.length > 0) {
+            setCurrentPlan(
+              MOCK_PLANS[Math.floor(Math.random() * MOCK_PLANS.length)],
+            );
+          }
+          setIsLoading(false);
+          return;
+        }
+
         const fetchedPlans = await getPlans();
         // 랜덤으로 섞기
         const shuffledPlans = [...fetchedPlans].sort(() => Math.random() - 0.5);

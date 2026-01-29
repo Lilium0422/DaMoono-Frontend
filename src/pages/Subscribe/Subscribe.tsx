@@ -20,6 +20,10 @@ import type {
   Subscribe as SubscribeType,
 } from './types';
 
+// Temporary flag: force using mock data for local testing.
+// Set to false to use real backend API.
+const USE_TEMP_MOCK = true;
+
 // 현재 사용 중인 구독 카드 컴포넌트
 interface CurrentSubscribeCardProps {
   subscribe: SubscribeType;
@@ -451,6 +455,37 @@ export default function Subscribe() {
       try {
         setIsLoading(true);
         setError(null);
+        if (USE_TEMP_MOCK) {
+          const shuffledMockSubscribes = [...MOCK_SUBSCRIBES].sort(
+            () => Math.random() - 0.5,
+          );
+          setSubscribes(shuffledMockSubscribes);
+          const savedSubscribeId = localStorage.getItem('currentSubscribeId');
+          if (savedSubscribeId && MOCK_SUBSCRIBES.length > 0) {
+            const subscribeId = parseInt(savedSubscribeId, 10);
+            const savedSubscribe = MOCK_SUBSCRIBES.find(
+              (s) => s.id === subscribeId,
+            );
+            if (savedSubscribe) {
+              setCurrentSubscribe(savedSubscribe);
+            } else {
+              setCurrentSubscribe(
+                MOCK_SUBSCRIBES[
+                  Math.floor(Math.random() * MOCK_SUBSCRIBES.length)
+                ],
+              );
+            }
+          } else if (MOCK_SUBSCRIBES.length > 0) {
+            setCurrentSubscribe(
+              MOCK_SUBSCRIBES[
+                Math.floor(Math.random() * MOCK_SUBSCRIBES.length)
+              ],
+            );
+          }
+          setIsLoading(false);
+          return;
+        }
+
         const fetchedSubscribes = await getSubscribes();
         setSubscribes(fetchedSubscribes);
 
