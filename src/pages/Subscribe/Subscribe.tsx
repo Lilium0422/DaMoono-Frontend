@@ -20,6 +20,10 @@ import type {
   Subscribe as SubscribeType,
 } from './types';
 
+// Temporary flag: force using mock data for local testing.
+// Set to false to use real backend API.
+const USE_TEMP_MOCK = false;
+
 // 현재 사용 중인 구독 카드 컴포넌트
 interface CurrentSubscribeCardProps {
   subscribe: SubscribeType;
@@ -121,26 +125,31 @@ function SortFilterPanel({
   const sortOrderMenuRef = useRef<HTMLDivElement>(null);
   const sortMenuRef = useRef<HTMLDivElement>(null);
   const filterMenuRef = useRef<HTMLDivElement>(null);
+  const sortOrderButtonRef = useRef<HTMLButtonElement>(null);
+  const sortTargetButtonRef = useRef<HTMLButtonElement>(null);
+  const filterButtonRef = useRef<HTMLButtonElement>(null);
 
   // 외부 클릭 감지
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (
+        sortOrderButtonRef.current?.contains(target) ||
+        sortTargetButtonRef.current?.contains(target) ||
+        filterButtonRef.current?.contains(target)
+      ) {
+        return;
+      }
       if (
         sortOrderMenuRef.current &&
-        !sortOrderMenuRef.current.contains(event.target as Node)
+        !sortOrderMenuRef.current.contains(target)
       ) {
         setShowSortOrderMenu(false);
       }
-      if (
-        sortMenuRef.current &&
-        !sortMenuRef.current.contains(event.target as Node)
-      ) {
+      if (sortMenuRef.current && !sortMenuRef.current.contains(target)) {
         setShowSortMenu(false);
       }
-      if (
-        filterMenuRef.current &&
-        !filterMenuRef.current.contains(event.target as Node)
-      ) {
+      if (filterMenuRef.current && !filterMenuRef.current.contains(target)) {
         setShowFilterMenu(false);
       }
     };
@@ -155,10 +164,11 @@ function SortFilterPanel({
     <div className={styles.filterPanel}>
       <div className={styles.filterControls}>
         {/* 정렬 순서 */}
-        <div className={styles.selectWrapper} style={{ width: '85px' }}>
+        <div className={styles.selectWrapper} style={{ width: '120px' }}>
           <button
+            ref={sortOrderButtonRef}
             onClick={() => {
-              setShowSortOrderMenu(!showSortOrderMenu);
+              setShowSortOrderMenu((prev) => !prev);
               setShowSortMenu(false);
               setShowFilterMenu(false);
             }}
@@ -242,8 +252,9 @@ function SortFilterPanel({
         {/* 정렬 기준 */}
         <div className={styles.selectWrapper} style={{ width: '120px' }}>
           <button
+            ref={sortTargetButtonRef}
             onClick={() => {
-              setShowSortMenu(!showSortMenu);
+              setShowSortMenu((prev) => !prev);
               setShowSortOrderMenu(false);
               setShowFilterMenu(false);
             }}
@@ -305,10 +316,11 @@ function SortFilterPanel({
         </div>
 
         {/* 필터 버튼 */}
-        <div className={styles.selectWrapper} style={{ width: '80px' }}>
+        <div className={styles.selectWrapper} style={{ width: '120px' }}>
           <button
+            ref={filterButtonRef}
             onClick={() => {
-              setShowFilterMenu(!showFilterMenu);
+              setShowFilterMenu((prev) => !prev);
               setShowSortOrderMenu(false);
               setShowSortMenu(false);
             }}
@@ -451,6 +463,37 @@ export default function Subscribe() {
       try {
         setIsLoading(true);
         setError(null);
+        if (USE_TEMP_MOCK) {
+          const shuffledMockSubscribes = [...MOCK_SUBSCRIBES].sort(
+            () => Math.random() - 0.5,
+          );
+          setSubscribes(shuffledMockSubscribes);
+          const savedSubscribeId = localStorage.getItem('currentSubscribeId');
+          if (savedSubscribeId && MOCK_SUBSCRIBES.length > 0) {
+            const subscribeId = parseInt(savedSubscribeId, 10);
+            const savedSubscribe = MOCK_SUBSCRIBES.find(
+              (s) => s.id === subscribeId,
+            );
+            if (savedSubscribe) {
+              setCurrentSubscribe(savedSubscribe);
+            } else {
+              setCurrentSubscribe(
+                MOCK_SUBSCRIBES[
+                  Math.floor(Math.random() * MOCK_SUBSCRIBES.length)
+                ],
+              );
+            }
+          } else if (MOCK_SUBSCRIBES.length > 0) {
+            setCurrentSubscribe(
+              MOCK_SUBSCRIBES[
+                Math.floor(Math.random() * MOCK_SUBSCRIBES.length)
+              ],
+            );
+          }
+          setIsLoading(false);
+          return;
+        }
+
         const fetchedSubscribes = await getSubscribes();
         setSubscribes(fetchedSubscribes);
 
@@ -654,17 +697,41 @@ export default function Subscribe() {
           {/* 현재 사용 중인 구독 */}
           <div className={styles.currentSubscribeSection}>
             <h2 className={styles.currentSubscribeTitle}>현재 사용중인 구독</h2>
-            {currentSubscribe ? (
-              <CurrentSubscribeCard
-                subscribe={currentSubscribe}
-                isSelected={selectedSubscribeId === currentSubscribe.id}
-                isUpdating={isUpdatingSubscribe}
-                isDisabled={isAuthenticated === false}
-                onClick={handleSubscribeClick}
-              />
-            ) : (
-              <div className={styles.loadingMessage}>로딩 중...</div>
-            )}
+            {(() => {
+              const hasSavedSubscribe =
+                !!localStorage.getItem('currentSubscribeId');
+              if (!hasSavedSubscribe) {
+                return (
+                  <div
+                    className={`${styles.currentSubscribeCard} ${styles.currentSubscribeCardDisabled}`}
+                  >
+                    <div className={styles.disabledContent}>
+                      <img
+                        src={nologinImage}
+                        alt="로그인 필요"
+                        className={styles.disabledImage}
+                      />
+                      <div className={styles.disabledText}>
+                        <span>현재 사용중인 서비스가 없거나</span>
+                        <span>로그인이 되어있지 않습니다.</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+              if (currentSubscribe) {
+                return (
+                  <CurrentSubscribeCard
+                    subscribe={currentSubscribe}
+                    isSelected={selectedSubscribeId === currentSubscribe.id}
+                    isUpdating={isUpdatingSubscribe}
+                    isDisabled={isAuthenticated === false}
+                    onClick={handleSubscribeClick}
+                  />
+                );
+              }
+              return <div className={styles.loadingMessage}>로딩 중...</div>;
+            })()}
           </div>
 
           {/* 정렬/필터 패널 */}
@@ -676,6 +743,9 @@ export default function Subscribe() {
             <div className={styles.errorMessage}>{error}</div>
           ) : (
             <>
+              {/* 모든 구독 */}
+              <h2 className={styles.allSubscribesTitle}>모든 구독</h2>
+
               <SortFilterPanel
                 sortOrder={sortOrder}
                 setSortOrder={setSortOrder}
@@ -684,9 +754,6 @@ export default function Subscribe() {
                 selectedCategories={selectedCategories}
                 setSelectedCategories={setSelectedCategories}
               />
-
-              {/* 모든 구독 */}
-              <h2 className={styles.allSubscribesTitle}>모든 구독</h2>
 
               {/* 구독 리스트 */}
               <div className={styles.subscribeList}>
