@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
+import nologinImage from '@/assets/images/nologin.png';
 import subscribeHeaderCharacter from '@/assets/images/subscribe-header-character.png';
 import BottomNav from '@/components/BottomNav';
 import Header from '@/components/Header';
+import { getAuthStatus } from '@/services/authApi';
 import { getSubscribes } from '@/services/subscribeApi';
 import Layout from '../layout/Layout';
 import {
@@ -23,6 +25,7 @@ interface CurrentSubscribeCardProps {
   subscribe: SubscribeType;
   isSelected: boolean;
   onClick?: (subscribe: SubscribeType) => void;
+  isDisabled?: boolean;
 }
 
 function CurrentSubscribeCard({
@@ -30,9 +33,30 @@ function CurrentSubscribeCard({
   isSelected,
   onClick,
   isUpdating,
+  isDisabled = false,
 }: CurrentSubscribeCardProps & { isUpdating?: boolean }) {
   const { name, monthlyPrice, category, description } = subscribe;
   const subscribeImage = SUBSCRIBE_IMAGES[name] || null;
+
+  if (isDisabled) {
+    return (
+      <div
+        className={`${styles.currentSubscribeCard} ${styles.currentSubscribeCardDisabled}`}
+      >
+        <div className={styles.disabledContent}>
+          <img
+            src={nologinImage}
+            alt="로그인 필요"
+            className={styles.disabledImage}
+          />
+          <div className={styles.disabledText}>
+            <span>현재 사용중인 서비스가 없거나</span>
+            <span>로그인이 되어있지 않습니다.</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <button
@@ -419,6 +443,7 @@ export default function Subscribe() {
     useState<SubscribeType | null>(null);
   const [isUpdatingSubscribe, setIsUpdatingSubscribe] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null); // null: 확인 중, true: 로그인, false: 비로그인
 
   // API에서 구독 목록 가져오기
   useEffect(() => {
@@ -513,6 +538,19 @@ export default function Subscribe() {
       window.removeEventListener('focus', handleFocus);
     };
   }, [loadCurrentSubscribe]);
+
+  // 로그인 상태 확인
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        await getAuthStatus();
+        setIsAuthenticated(true);
+      } catch {
+        setIsAuthenticated(false);
+      }
+    };
+    checkAuth();
+  }, []);
 
   // 성공 모달 표시 신호 감지
   useEffect(() => {
@@ -621,6 +659,7 @@ export default function Subscribe() {
                 subscribe={currentSubscribe}
                 isSelected={selectedSubscribeId === currentSubscribe.id}
                 isUpdating={isUpdatingSubscribe}
+                isDisabled={isAuthenticated === false}
                 onClick={handleSubscribeClick}
               />
             ) : (

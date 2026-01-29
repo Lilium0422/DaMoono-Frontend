@@ -105,7 +105,7 @@ export const currentSubscribeSection = style({
   marginBottom: '20px',
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
+  alignItems: 'flex-start',
 });
 
 export const filterPanel = style({
@@ -524,4 +524,41 @@ export const currentSubscribeCard = style({
 
 export const subscribeCardSelected = style({
   border: '2px solid #E91685',
+});
+
+export const currentSubscribeCardDisabled = style({
+  position: 'relative',
+  cursor: 'default',
+  backgroundColor: '#fafafa',
+  borderColor: '#e5e7eb',
+  ':hover': {
+    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+  },
+});
+
+export const disabledContent = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '16px',
+  width: '100%',
+  padding: '8px 0',
+});
+
+export const disabledImage = style({
+  width: '120px',
+  height: '80px',
+  objectFit: 'contain',
+  flexShrink: 0,
+});
+
+export const disabledText = style({
+  fontSize: '14px',
+  fontWeight: '500',
+  color: '#6b7280',
+  lineHeight: '1.5',
+  flex: 1,
+  textAlign: 'left',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '4px',
 });

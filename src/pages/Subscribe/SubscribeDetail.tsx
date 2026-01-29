@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import BottomNav from '@/components/BottomNav';
 import Header from '@/components/Header';
+import { getAuthStatus } from '@/services/authApi';
 import { PAGE_PATHS } from '@/shared/config/paths';
 import Layout from '../layout/Layout';
 import { CATEGORY_LABELS, MOCK_SUBSCRIBES } from './constants';
@@ -15,6 +16,7 @@ export default function SubscribeDetail() {
     ? MOCK_SUBSCRIBES.find((s) => s.id === subscribeId)
     : null;
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showLoginRequiredModal, setShowLoginRequiredModal] = useState(false);
 
   if (!subscribe) {
     return (
@@ -51,7 +53,7 @@ export default function SubscribeDetail() {
             className={styles.backButton}
             onClick={() => navigate(PAGE_PATHS.SUBSCRIBE)}
           >
-            ← 뒤로가기
+            ← 목록가기
           </button>
           <h1 className={styles.title}>구독 서비스 상세</h1>
         </div>
@@ -150,16 +152,24 @@ export default function SubscribeDetail() {
                 <button
                   type="button"
                   className={styles.modalConfirmButton}
-                  onClick={() => {
-                    // localStorage에 현재 사용중인 구독 저장
-                    localStorage.setItem(
-                      'currentSubscribeId',
-                      subscribe.id.toString(),
-                    );
-                    // Subscribe 페이지로 이동 (성공 모달 표시 신호 전달)
-                    navigate(PAGE_PATHS.SUBSCRIBE, {
-                      state: { showSuccessModal: true },
-                    });
+                  onClick={async () => {
+                    // 로그인 상태 확인
+                    try {
+                      await getAuthStatus();
+                      // 로그인 상태: localStorage에 현재 사용중인 구독 저장
+                      localStorage.setItem(
+                        'currentSubscribeId',
+                        subscribe.id.toString(),
+                      );
+                      // Subscribe 페이지로 이동 (성공 모달 표시 신호 전달)
+                      navigate(PAGE_PATHS.SUBSCRIBE, {
+                        state: { showSuccessModal: true },
+                      });
+                    } catch {
+                      // 비로그인 상태: 로그인 필요 모달 표시
+                      setShowConfirmModal(false);
+                      setShowLoginRequiredModal(true);
+                    }
                   }}
                 >
                   확인
@@ -175,9 +185,51 @@ export default function SubscribeDetail() {
             </div>
           </button>
         )}
+
+        {/* 로그인 필요 모달 */}
+        {showLoginRequiredModal && (
+          <button
+            type="button"
+            className={styles.modalOverlay}
+            onClick={() => setShowLoginRequiredModal(false)}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') {
+                setShowLoginRequiredModal(false);
+              }
+            }}
+            aria-label="모달 닫기"
+          >
+            <div
+              className={styles.modalContent}
+              role="dialog"
+              onClick={(e) => e.stopPropagation()}
+              onKeyDown={(e) => e.stopPropagation()}
+            >
+              <h3 className={styles.modalTitle}>로그인이 필요합니다.</h3>
+              <div className={styles.modalButtons}>
+                <button
+                  type="button"
+                  className={styles.modalConfirmButton}
+                  onClick={() => {
+                    navigate(PAGE_PATHS.LOGIN_FORM);
+                  }}
+                >
+                  확인
+                </button>
+                <button
+                  type="button"
+                  className={styles.modalCancelButton}
+                  onClick={() => setShowLoginRequiredModal(false)}
+                >
+                  취소
+                </button>
+              </div>
+            </div>
+          </button>
+        )}
       </div>
 
-      {!showConfirmModal && <BottomNav />}
+      {!showConfirmModal && !showLoginRequiredModal && <BottomNav />}
     </Layout>
   );
 }

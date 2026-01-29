@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
+import nologinImage from '@/assets/images/nologin.png';
 import planHeaderCharacter from '@/assets/images/plan-header-character.png';
 import BottomNav from '@/components/BottomNav';
 import Header from '@/components/Header';
+import { getAuthStatus } from '@/services/authApi';
 import { getPlans } from '@/services/planApi';
 import { PAGE_PATHS } from '@/shared/config/paths';
 import Layout from '../layout/Layout';
@@ -22,6 +24,7 @@ interface CurrentPlanCardProps {
   isCompareMode?: boolean;
   isCompareSelected?: boolean;
   onClick?: (plan: PlanType) => void;
+  isDisabled?: boolean;
 }
 
 function CurrentPlanCard({
@@ -31,6 +34,7 @@ function CurrentPlanCard({
   isCompareSelected = false,
   onClick,
   isUpdating,
+  isDisabled = false,
 }: CurrentPlanCardProps & { isUpdating?: boolean }) {
   const {
     name,
@@ -41,6 +45,26 @@ function CurrentPlanCard({
     overageSpeedMbps,
     subscriptionServices,
   } = plan;
+
+  if (isDisabled) {
+    return (
+      <div
+        className={`${styles.currentPlanCard} ${styles.currentPlanCardDisabled}`}
+      >
+        <div className={styles.disabledContent}>
+          <img
+            src={nologinImage}
+            alt="로그인 필요"
+            className={styles.disabledImage}
+          />
+          <div className={styles.disabledText}>
+            <span>현재 사용중인 서비스가 없거나</span>
+            <span>로그인이 되어있지 않습니다.</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <button
@@ -529,6 +553,7 @@ export default function Plan() {
   const [currentPlan, setCurrentPlan] = useState<PlanType | null>(null);
   const [isUpdatingPlan, setIsUpdatingPlan] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null); // null: 확인 중, true: 로그인, false: 비로그인
 
   // API에서 요금제 목록 가져오기
   useEffect(() => {
@@ -606,6 +631,19 @@ export default function Plan() {
     window.addEventListener('focus', loadCurrentPlan);
     return () => window.removeEventListener('focus', loadCurrentPlan);
   }, [loadCurrentPlan]);
+
+  // 로그인 상태 확인
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        await getAuthStatus();
+        setIsAuthenticated(true);
+      } catch {
+        setIsAuthenticated(false);
+      }
+    };
+    checkAuth();
+  }, []);
 
   // 성공 모달 표시 신호 감지
   useEffect(() => {
@@ -709,6 +747,7 @@ export default function Plan() {
                 isCompareMode={isCompareMode}
                 isCompareSelected={comparePlans.includes(currentPlan.id)}
                 isUpdating={isUpdatingPlan}
+                isDisabled={isAuthenticated === false}
                 onClick={handlePlanClick}
               />
             ) : (
