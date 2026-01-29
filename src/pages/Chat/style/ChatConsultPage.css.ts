@@ -1,5 +1,4 @@
 import { keyframes, style } from '@vanilla-extract/css';
-import * as chatInputStyles from './ChatInput.css';
 
 const bounce = keyframes({
   '0%, 80%, 100%': {
