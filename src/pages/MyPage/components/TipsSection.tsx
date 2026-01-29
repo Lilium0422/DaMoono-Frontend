@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router';
+import aiChatMoono from '@/assets/images/ai-chat-moono.png';
+import tipMoono from '@/assets/images/tip-moono.png';
 import * as css from '../styles/MyPage.css';
 
 interface TipItem {
@@ -14,14 +16,14 @@ const TIPS: TipItem[] = [
     id: 1,
     description: '다무너 이용 가이드',
     title: '무너가 알려주는 꿀팁!',
-    imageUrl: 'src/assets/images/tip-moono.png',
+    imageUrl: tipMoono,
     path: '/mypage/tips',
   },
   {
     id: 2,
     description: '상담 챗봇 이용이 처음이시라구요?',
     title: '사용 방법을 한눈에!',
-    imageUrl: 'src/assets/images/ai-chat-moono.png',
+    imageUrl: aiChatMoono,
     path: '/chat/manual',
   },
 ];

@@ -85,11 +85,11 @@ export function Menu() {
             >
               <span className={css.menuLeft}>
                 <span className={css.icon}>
-                  {item.icon.startsWith('/') || item.icon.includes('.png') ? (
-                    <img src={item.icon} alt="요금제" className={css.iconImg} />
-                  ) : (
-                    item.icon
-                  )}
+                  <img
+                    src={item.icon}
+                    alt={item.label}
+                    className={css.iconImg}
+                  />
                 </span>
                 {item.label}
               </span>
