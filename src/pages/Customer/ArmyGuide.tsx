@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react'; // useEffect 추가
 import BottomNav from '../../components/BottomNav';
 import BridgeModal from '../Customer/BridgeModal.tsx';
 import Layout from '../layout/Layout';
@@ -7,6 +7,21 @@ import * as S from './style/ArmyGuide.css';
 export default function ArmyGuide() {
   const [checkedList, setCheckedList] = useState([false, false, false]);
   const [targetUrl, setTargetUrl] = useState<string | null>(null);
+
+  /**
+   * [추가] 페이지 진입 시 스크롤 최상단 고정 로직
+   * 브라우저의 스크롤 복원 기능을 방지하고 항상 위에서부터 보여줍니다.
+   */
+  useEffect(() => {
+    // 1. 전체 윈도우 스크롤 초기화
+    window.scrollTo(0, 0);
+
+    // 2. scrollArea 컨테이너 내부 스크롤 초기화
+    const scrollContainer = document.querySelector(`.${S.scrollArea}`);
+    if (scrollContainer) {
+      scrollContainer.scrollTop = 0;
+    }
+  }, []);
 
   // 체크박스 상태 토글
   const handleCheck = (index: number) => {
@@ -55,7 +70,7 @@ export default function ArmyGuide() {
           <div className={S.percentText}>{progressPercent} %</div>
         </div>
 
-        {/* 7. 문서 카드 버튼 리스트 (인라인 top 제거됨) */}
+        {/* 7. 문서 카드 버튼 리스트 */}
         <button
           type="button"
           className={S.documentCard}
@@ -114,9 +129,8 @@ export default function ArmyGuide() {
         </button>
       </div>
 
-      {/* 8. 하단 주의사항 (warningText 에러 해결) */}
+      {/* 8. 하단 주의사항 */}
       <div className={S.warningBox}>
-        {/* CSS 파일에 export const warningText 스타일이 반드시 있어야 합니다. */}
         <span className={S.warningText}>
           ※ 주의 사항 : 모든 서류는 발급일로부터 3개월 이내여야 합니다.
         </span>

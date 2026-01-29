@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react'; // useEffect 추가
 import BottomNav from '../../components/BottomNav';
 import BridgeModal from '../Customer/BridgeModal.tsx';
 import Layout from '../layout/Layout';
@@ -7,6 +7,21 @@ import * as S from './style/MinorGuide.css.ts';
 export default function MinorGuide() {
   const [checkedList, setCheckedList] = useState([false, false, false]);
   const [targetUrl, setTargetUrl] = useState<string | null>(null);
+
+  /**
+   * [추가] 페이지 진입 시 스크롤 최상단 고정 로직
+   * 모바일 브라우저의 스크롤 복원 기능을 방지하고 페이지를 맨 위에서부터 보여줍니다.
+   */
+  useEffect(() => {
+    // 1. 브라우저 윈도우 스크롤 초기화
+    window.scrollTo(0, 0);
+
+    // 2. 바닐라 익스트랙으로 정의된 scrollArea 컨테이너 내부 스크롤 초기화
+    const scrollContainer = document.querySelector(`.${S.scrollArea}`);
+    if (scrollContainer) {
+      scrollContainer.scrollTop = 0;
+    }
+  }, []);
 
   // 체크박스 토글 함수
   const handleCheck = (index: number) => {
@@ -56,7 +71,7 @@ export default function MinorGuide() {
           <div className={S.percentText}>{progressPercent} %</div>
         </div>
 
-        {/* 7. 문서 카드 리스트 (인라인 top을 제거하여 자동 간격 유지) */}
+        {/* 7. 문서 카드 리스트 (인라인 top 제거됨) */}
         <button
           type="button"
           className={S.documentCard}

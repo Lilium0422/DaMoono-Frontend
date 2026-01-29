@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react'; // useEffect 추가
 import BottomNav from '../../components/BottomNav';
 import BridgeModal from '../Customer/BridgeModal.tsx';
 import Layout from '../layout/Layout';
@@ -7,6 +7,21 @@ import * as S from './style/ProxyGuide.css';
 export default function ProxyGuide() {
   const [checkedList, setCheckedList] = useState([false, false, false]);
   const [targetUrl, setTargetUrl] = useState<string | null>(null);
+
+  /**
+   * [추가] 페이지 진입 시 스크롤 최상단 초기화
+   * 사용자 기기에서 스크롤이 중간에 멈춰있는 현상을 방지합니다.
+   */
+  useEffect(() => {
+    // 1. 전체 윈도우 스크롤을 맨 위로 이동
+    window.scrollTo(0, 0);
+
+    // 2. scrollArea 컨테이너 요소가 있다면 내부 스크롤도 초기화
+    const scrollContainer = document.querySelector(`.${S.scrollArea}`);
+    if (scrollContainer) {
+      scrollContainer.scrollTop = 0;
+    }
+  }, []);
 
   // 체크박스 상태 토글
   const handleCheck = (index: number) => {
@@ -21,7 +36,7 @@ export default function ProxyGuide() {
 
   return (
     <Layout>
-      {/* 1. 전체 스크롤 영역: CSS에서 콘텐츠를 중앙으로 밀어주는 패딩 적용됨 */}
+      {/* 1. 전체 스크롤 영역 */}
       <div className={S.scrollArea}>
         {/* 2. 상단 로고 */}
         <div className={S.topLogo} />
@@ -55,7 +70,7 @@ export default function ProxyGuide() {
           <div className={S.percentText}>{progressPercent} %</div>
         </div>
 
-        {/* 7. 문서 카드 리스트 (인라인 스타일 top 제거) */}
+        {/* 7. 문서 카드 리스트 */}
         <button
           type="button"
           className={S.documentCard}

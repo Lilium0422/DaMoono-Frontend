@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react'; // useEffect 추가
 import { useNavigate } from 'react-router-dom';
 import BottomNav from '../../components/BottomNav';
 import { PAGE_PATHS } from '../../shared/config/paths';
@@ -14,6 +14,21 @@ export default function CustomerService() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<string>('전체');
+
+  /**
+   * [추가] 페이지 진입 시 스크롤 최상단 초기화 로직
+   * 브라우저가 이전 스크롤 위치를 기억해 하단부터 보여주는 현상을 방지합니다.
+   */
+  useEffect(() => {
+    // 1. 전체 윈도우 스크롤 초기화
+    window.scrollTo(0, 0);
+
+    // 2. 바닐라 익스트랙 scrollArea 컨테이너 내부 스크롤 초기화
+    const scrollContainer = document.querySelector(`.${S.scrollArea}`);
+    if (scrollContainer) {
+      scrollContainer.scrollTop = 0;
+    }
+  }, []);
 
   // 핸들러 함수
   const toggleFaq = (id: string) => setOpenId(openId === id ? null : id);
@@ -38,7 +53,7 @@ export default function CustomerService() {
 
   return (
     <Layout>
-      {/* 상단 헤더 섹션: CSS clamp에 의해 캐릭터와 로고 크기가 자동 조절됩니다. */}
+      {/* 상단 헤더 섹션 */}
       <header className={S.headerSection}>
         <div className={S.topLogo} />
         <div className={S.customerCharacter} />
@@ -96,7 +111,6 @@ export default function CustomerService() {
         <div className={S.guideFrame}>
           <p className={S.cardTitle}>항목 선택 시 서류 안내</p>
 
-          {/* ⭐ 3개 버튼을 한 줄로 정렬하는 반응형 컨테이너 */}
           <div className={S.categoryGroup}>
             <button
               type="button"
