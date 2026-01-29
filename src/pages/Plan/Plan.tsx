@@ -200,7 +200,7 @@ function SortFilterPanel({
             className={styles.selectBase}
           >
             {sortOrder === null
-              ? '기본'
+              ? '기본 순'
               : sortOrder === 'asc'
                 ? '낮은 순'
                 : '높은 순'}
@@ -229,7 +229,7 @@ function SortFilterPanel({
                   setShowSortOrderMenu(false);
                 }}
               >
-                <span>기본</span>
+                <span>기본 순</span>
                 {sortOrder === null && (
                   <svg
                     className={styles.checkIcon}
@@ -313,7 +313,7 @@ function SortFilterPanel({
             }}
             className={styles.selectBase}
           >
-            {sortTarget ? SORT_LABELS[sortTarget] : '정렬 기준'}
+            {sortTarget ? SORT_LABELS[sortTarget] : '기본 정렬'}
           </button>
           <svg
             className={styles.selectIcon}
@@ -332,6 +332,32 @@ function SortFilterPanel({
           </svg>
           {showSortMenu && (
             <div ref={sortMenuRef} className={styles.sortMenu}>
+              <button
+                className={`${styles.sortMenuItem} ${sortTarget === null ? styles.sortMenuItemSelected : ''}`}
+                onClick={() => {
+                  setSortTarget(null);
+                  setShowSortMenu(false);
+                }}
+              >
+                <span>기본 정렬</span>
+                {sortTarget === null && (
+                  <svg
+                    className={styles.checkIcon}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-label="선택됨"
+                    role="img"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                )}
+              </button>
               {Object.entries(SORT_LABELS).map(([key, label]) => {
                 const isSelected = sortTarget === key;
                 return (
@@ -710,11 +736,26 @@ export default function Plan() {
     }
     if (sortTarget && sortOrder !== null) {
       filtered.sort((a, b) => {
-        const aVal = a[sortTarget] ?? 0;
-        const bVal = b[sortTarget] ?? 0;
-        return sortOrder === 'asc'
-          ? (aVal as number) - (bVal as number)
-          : (bVal as number) - (aVal as number);
+        // normalize special 'unlimited' values so they sort as highest
+        const rawA = a[sortTarget];
+        const rawB = b[sortTarget];
+
+        let aVal = (rawA ?? 0) as number;
+        let bVal = (rawB ?? 0) as number;
+
+        // dataAmountMb: 0 means unlimited -> treat as very large
+        if (sortTarget === 'dataAmountMb') {
+          aVal = aVal === 0 ? Number.MAX_SAFE_INTEGER : aVal;
+          bVal = bVal === 0 ? Number.MAX_SAFE_INTEGER : bVal;
+        }
+
+        // voiceMinutes: -1 means unlimited -> treat as very large
+        if (sortTarget === 'voiceMinutes') {
+          aVal = aVal === -1 ? Number.MAX_SAFE_INTEGER : aVal;
+          bVal = bVal === -1 ? Number.MAX_SAFE_INTEGER : bVal;
+        }
+
+        return sortOrder === 'asc' ? aVal - bVal : bVal - aVal;
       });
     }
     return filtered;
