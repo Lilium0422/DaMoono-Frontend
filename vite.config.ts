@@ -10,16 +10,4 @@ export default defineConfig({
     },
   },
   plugins: [react(), vanillaExtractPlugin()],
-  server: {
-    proxy: {
-      '/reference': {
-        target: 'https://damoono-backend-production.up.railway.app',
-        changeOrigin: true,
-        secure: true,
-        rewrite: (path) => path.replace(/^\/reference/, '/reference'),
-        // If backend uses cookies for auth during local dev, uncomment:
-        // cookieDomainRewrite: { "*": "" },
-      },
-    },
-  },
 });
