@@ -1,13 +1,12 @@
-import { Loading3D } from '@/components/loading';
+import SearchMoono from '@/assets/images/search-moono.png';
 
 const CharacterScene = () => {
   return (
     <div style={{ width: '100px', height: '100px' }}>
-      <Loading3D
-        textureUrl="src/assets/images/search-moono.png"
-        size="lg"
-        floatSpeed={1.8}
-        rotation={0.3}
+      <img
+        src={SearchMoono}
+        alt="Search Moono"
+        style={{ width: '100%', height: '100%' }}
       />
     </div>
   );
