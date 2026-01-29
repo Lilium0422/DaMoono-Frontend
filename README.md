@@ -2,7 +2,8 @@
 
 ## 실시간 상담 및 AI 기반 상담 요약 통신사 플랫폼, 다무너 (DaMoono) 🐙
 
-<img width="1300" height="853" alt="DaMoono Main" src="https://github.com/user-attachments/assets/1c3938b5-b14c-405f-aa1c-13d8ee3291c8" />
+<img width="1136" height="624" alt="image" src="https://github.com/user-attachments/assets/ff880c6a-aff5-4124-b319-f3e4be3210da" />
+
 
 **다무너(DaMoono)** 는 
 사용자 맞춤형 최적의 요금제를 추천하고,  
