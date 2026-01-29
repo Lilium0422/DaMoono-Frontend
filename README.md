@@ -1,13 +1,13 @@
 <div align="center">
 
-## AI 기반 통신사 요금제 추천 및 실시간 상담 서비스, 다무너 (DaMoono) 🐙
+## 실시간 상담 및 AI 기반 상담 요약 통신사 플랫폼, 다무너 (DaMoono) 🐙
 
 <img width="1300" height="853" alt="DaMoono Main" src="https://github.com/user-attachments/assets/1c3938b5-b14c-405f-aa1c-13d8ee3291c8" />
 
 **다무너(DaMoono)** 는 
-사용자의 통신 사용 패턴과 성향을 분석해 최적의 요금제를 추천하고,  
+사용자 맞춤형 최적의 요금제를 추천하고,  
 AI 챗봇과 실시간 상담사 연결을 결합하여  
-**상담 요약까지 제공하는 통합 요금제 상담 서비스**입니다.
+**AI를 통한 상담 요약까지 제공하는 통합 요금제 상담 서비스**입니다.
 
 📑 **PPT** : [발표 자료 링크](여기에_PPT_링크)  
 🌐 **배포 링크** : [서비스 바로가기](여기에_배포_링크)  
@@ -18,10 +18,11 @@ AI 챗봇과 실시간 상담사 연결을 결합하여
 ---
 
 ## 📌 프로젝트 개요
+
 | 항목     | 내용                                |
 | ------ | --------------------------------- |
 | 프로젝트명  | 다무너 (DaMoono)                     |
-| 서비스 주제 | AI 기반 통신사 요금제 추천 · 실시간 상담 · 상담 요약 |
+| 서비스 주제 | 실시간 상담 · AI 기반 상담 요약 |
 | 해결 방식  | AI 챗봇 및 요약 + 실시간 상담 병행                 |
 | 개발 기간  | 2026.01.12 ~ 2026.01.30           |
 | 팀 구성   | Frontend 6명 · Backend 1명          |
@@ -32,7 +33,7 @@ AI 챗봇과 실시간 상담사 연결을 결합하여
 
 | 기능 미리보기 | 기능 설명 |
 | --- | --- |
-| ![이미지 준비중]() | **1. 🔐 소셜 로그인 & 인증 시스템**<br><br>• Kakao OAuth 기반 소셜 로그인으로 초기 진입 장벽 최소화<br>• 로그인 여부에 따라 접근 가능한 페이지 제어<br>• 인증 정보는 보안성을 고려해 쿠키 기반으로 관리<br>• 전역 상태 관리로 새로고침·페이지 이동 시 로그인 상태 유지<br>• 인증 만료 또는 실패 시 로그인 페이지로 안전하게 리다이렉트 |
+| ![이미지 준비중]() | **1. 🔐 로그인 & 인증 시스템**<br><br>• 로그인 여부에 따라 접근 가능한 페이지 제어<br>• 인증 정보는 보안성을 고려해 쿠키 기반으로 관리<br>• 전역 상태 관리로 새로고침·페이지 이동 시 로그인 상태 유지<br>• 인증 만료 또는 실패 시 로그인 페이지로 안전하게 리다이렉트 |
 | ![이미지 준비중]() | **2. 🧠 AI 챗봇 요금제 추천 (텍스트 / 음성)**<br><br>• OpenAI 기반 챗봇과 대화하며 요금제 추천 제공<br>• LangChain Conversation Chain 기반 대화 흐름 설계<br>• 의도 분석 → 프롬프트 생성 → 요금제 후보 도출 → 카드형 응답 렌더링 구조<br>• 텍스트 입력 / Web Speech API 기반 음성 입력 모두 지원<br>• 성향 테스트 결과를 프롬프트 컨텍스트에 포함해 추천 정확도 향상<br>• 정확 모드 / 자연 모드 전환 가능<br>• 챗봇 이탈 후 재접속 시 대화 히스토리 유지 |
 | ![이미지 준비중]() | **3. 💬 실시간 1:1 상담 시스템 (WebSocket)**<br><br>• AI 상담으로 해결되지 않는 경우를 대비한 실시간 상담사 연결 기능<br>• Socket.IO 기반 WebSocket 통신으로 사용자–상담사 1:1 매칭<br>• 상담 요청 → 대기 → 연결 → 종료 단계의 세션 상태 관리<br>• Room 기반 메시지 중계 구조<br>• 상담 종료 시 세션 및 소켓 정리로 안정적인 연결 유지 |
 | ![이미지 준비중]() | **4. 📊 요금제 탐색 및 비교 시각화**<br><br>• 통신망(LTE/5G), 가격, 데이터, 혜택 기준 요금제 탐색<br>• 요금제 공통 데이터 모델 정의로 필터·정렬 로직 단순화<br>• Chart.js 기반 요금·데이터·혜택 비교 시각화<br>• Flip Card UI로 핵심 정보 / 상세 정보 단계적 노출<br>• Framer Motion으로 비교 모드 전환 애니메이션 구현 |
@@ -41,6 +42,7 @@ AI 챗봇과 실시간 상담사 연결을 결합하여
 | ![이미지 준비중]() | **7. 📝 상담 요약 및 히스토리**<br><br>• AI 기반 상담 내용 자동 요약<br>• 마이페이지에서 과거 상담 내역 조회<br>• 상담별 주요 내용 및 추천 요금제 확인 |
 | ![이미지 준비중]() | **8. 📚 고객 지원 가이드**<br><br>• 군인 요금제 가이드<br>• 미성년자 가입 안내<br>• 대리인 가입 절차 안내<br>• FAQ 및 자주 묻는 질문 |
 | ![이미지 준비중]() | **9. 🎨 3D 인터랙티브 UI**<br><br>• Three.js 기반 3D 마스코트 애니메이션<br>• React Three Fiber로 로딩 화면 구현<br>• 사용자 인터랙션에 반응하는 동적 UI |
+
 
 ## ⚔️ 기술 스택
 | 분야         | 기술                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -52,6 +54,7 @@ AI 챗봇과 실시간 상담사 연결을 결합하여
 | Deploy     | ![Railway](https://img.shields.io/badge/Railway-0B0D0E?logo=railway\&logoColor=white) ![Vercel](https://img.shields.io/badge/Vercel-000000?logo=vercel\&logoColor=white)                                                                                                                                                                                                                                                                                                                                    |
 | Design & Collaboration  | ![Figma](https://img.shields.io/badge/Figma-F24E1E?logo=figma\&logoColor=white) ![Notion](https://img.shields.io/badge/Notion-000000?logo=notion\&logoColor=white)                                                                                                                                                                                                                                                                                                                                    |
 | Dev Tools  | ![Git](https://img.shields.io/badge/Git-F05032?logo=git\&logoColor=white) ![GitHub](https://img.shields.io/badge/GitHub-181717?logo=github) ![Biome](https://img.shields.io/badge/Biome-60A5FA) ![Lefthook](https://img.shields.io/badge/Lefthook-FF1E1E) ![Vitest](https://img.shields.io/badge/Vitest-6E9F18?logo=vitest\&logoColor=white)                                                                                                                                                                                                                           |
+
 
 ## 📦 설치 및 실행
 
@@ -109,21 +112,13 @@ LangChain + OpenAI API
 5. 상담 종료 및 요약
 
 ---
-오케이 👍 요청한 것 **전부 반영해서** 깔끔하게 다시 정리해줄게.
-
-* `@아이디` → **클릭 시 해당 GitHub 프로필로 이동**
-* **양해강** 역할에 **AI 추가**
-* **역할/기여 설명에서 bold 전부 제거**
-* **이름 bold는 유지**
-
----
 
 ## 👥 팀원 및 역할
 | 프로필 | 이름 | 주요 역할 및 기여 |
-| --- | --- | --- |
-| ![profile]() | **김예린**<br/>[@yerroong](https://github.com/yerroong) | **Frontend · AI**<br/>팀장으로, OpenAI + LangChain 기반 텍스트·음성 AI 챗봇 프론트·백엔드 연동 구현, 요금제·구독 상품 응답 로직 설계, Socket.IO 기반 실시간 상담 채팅 통신 구현, 상담사 채팅 UI 개발, 챗봇 대화 흐름·프롬프트 설계 및 챗봇 매뉴얼 제작 |
-| ![profile]() | **류종현**<br/>[@jonghyunRyu](https://github.com/jonghyunRyu) | **Frontend**<br/>마이페이지 및 관리자 페이지 UI 구현, 상담 이력·이용 데이터 시각화, 요금제·구독 정보 조회 UI 개발, 다중 데이터 로딩 렌더링 최적화 및 3D 로딩 UI 적용 |
-| ![profile]() | **양해강**<br/>[@Inoansta](https://github.com/Inoansta) | **Backend · AI**<br/>백엔드 프로젝트 및 DB 초기 셋업, 회원가입·인증 API 구현, REST API 설계, 프론트엔드 연동 및 서비스 배포 환경 구성, AI 기능 연동을 위한 서버 구조 설계 |
-| ![profile]() | **이해니**<br/>[@haeni82](https://github.com/haeni82) | **Frontend**<br/>상담 요약 페이지(UI) 구현, 유저용 상담 요약 프롬프트(JSON) 설계, 상담사 WebSocket 양방향 통신 구조 설계, 상담 요약 및 후속 액션 제안 기능 기획 |
-| ![profile]() | **이혁준**<br/>[@Lilium0422](https://github.com/Lilium0422) | **Frontend**<br/>홈·온보딩·맞춤형 서비스 추천 페이지 UI 및 컴포넌트 구현, 사용자 분석 로직 설계, 공용 레이아웃(헤더·하단 메뉴) 및 서비스 가이드 UI 개발 |
-| ![profile]() | **유덕현**<br/>[@Ydh0622](https://github.com/Ydh0622) | **Frontend**<br/>FAQ 페이지 및 군인·미성년자·대리인 가입 시 구비 서류 안내 UI 구현, 이미지 애니메이션 및 인터랙션 마무리 |
+| :---: | --- | --- |
+| <img width="100" height="100" alt="김예린" src="https://github.com/user-attachments/assets/1402d72e-21bf-4ce8-98a2-56a6dfba2aed" /> | **김예린**<br/>[@yerroong](https://github.com/yerroong) | **Frontend · AI**<br/>팀장으로, OpenAI + LangChain 기반 텍스트·음성 AI 챗봇 프론트·백엔드 연동 구현, 요금제·구독 상품 응답 로직 설계, Socket.IO 기반 실시간 상담 채팅 통신 구현, 상담사 채팅 UI 개발, 챗봇 대화 흐름·프롬프트 설계 및 챗봇 매뉴얼 제작 |
+| <img width="100" height="100" alt="류종현" src="https://via.placeholder.com/100" /> | **류종현**<br/>[@jonghyunRyu](https://github.com/jonghyunRyu) | **Frontend**<br/>마이페이지 및 관리자 페이지 UI 구현, 상담 이력·이용 데이터 시각화, 요금제·구독 정보 조회 UI 개발, 다중 데이터 로딩 렌더링 최적화 및 3D 로딩 UI 적용 |
+| <img width="100" height="100" alt="양해강" src="https://via.placeholder.com/100" /> | **양해강**<br/>[@Inoansta](https://github.com/Inoansta) | **Backend · AI**<br/>백엔드 프로젝트 및 DB 초기 셋업, 회원가입·인증 API 구현, REST API 설계, 프론트엔드 연동 및 서비스 배포 환경 구성, AI 기능 연동을 위한 서버 구조 설계 |
+| <img width="100" height="100" alt="이해니" src="https://via.placeholder.com/100" /> | **이해니**<br/>[@haeni82](https://github.com/haeni82) | **Frontend**<br/>상담 요약 페이지(UI) 구현, 유저용 상담 요약 프롬프트(JSON) 설계, 상담사 WebSocket 양방향 통신 구조 설계, 상담 요약 및 후속 액션 제안 기능 기획 |
+| <img width="100" height="100" alt="이혁준" src="https://via.placeholder.com/100" /> | **이혁준**<br/>[@Lilium0422](https://github.com/Lilium0422) | **Frontend**<br/>홈·온보딩·성향 분석 페이지 UI 및 컴포넌트 구현, 사용자 성향 분석 로직 설계, 공용 레이아웃(헤더·하단 메뉴) 및 서비스 가이드 UI 개발 |
+| <img width="100" height="100" alt="유덕현" src="https://via.placeholder.com/100" /> | **유덕현**<br/>[@Ydh0622](https://github.com/Ydh0622) | **Frontend**<br/>FAQ 페이지 및 군인·미성년자·대리인 가입 시 구비 서류 안내 UI 구현, 이미지 애니메이션 및 인터랙션 마무리 |
