@@ -1,3 +1,6 @@
+import guide1 from '@/assets/images/tip-guide-1.png';
+import guide2 from '@/assets/images/tip-guide-2.png';
+import guide3 from '@/assets/images/tip-guide-3.png';
 import BottomNav from '@/components/BottomNav';
 import Header from '@/components/Header';
 import Layout from '@/pages/layout/Layout';
@@ -37,25 +40,25 @@ export default function TipsPage() {
               id: 1,
               title: '상담 봇 서비스와 상담 요약 사용법',
               description: '다무너의 상담 요약 서비스를 이용할 수 있어요',
-              imageUrl: '/src/assets/images/tip-guide-1.png',
+              imageUrl: guide1,
             },
             {
               id: 2,
               title: '상담 챗봇 서비스와 상담 요약 사용법',
               description: '사용 방법을 자세히 알고 싶다면!',
-              imageUrl: '/src/assets/images/tip-guide-2.png',
+              imageUrl: guide2,
             },
             {
               id: 3,
               title: '나의 요금제 및 구독 서비스 확인',
               description: '나의 요금제와 구독 서비스를 한눈에 볼 수 있어요',
-              imageUrl: '/src/assets/images/tip-guide-1.png',
+              imageUrl: guide1,
             },
             {
               id: 4,
               title: '나에게 맞는 서비스를 알 수 있어요',
               description: '메뉴의 서비스 탭을 이용해보세요!',
-              imageUrl: '/src/assets/images/tip-guide-3.png',
+              imageUrl: guide3,
             },
           ]}
         />
