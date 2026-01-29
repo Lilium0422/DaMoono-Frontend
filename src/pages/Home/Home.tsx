@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import chatbotButton from '@/assets/images/damoono-chatbot-button-removebg.png';
@@ -13,9 +14,29 @@ import {
   MOCK_SUBSCRIBES,
   SUBSCRIBE_IMAGES,
 } from '@/pages/Subscribe/constants';
+import { fetchCounselList } from '@/services/counselApi';
 import { PAGE_PATHS } from '@/shared/config/paths';
 import Layout from '../layout/Layout';
 import * as styles from './style/Home.css';
+
+interface CounselApiItem {
+  sessionId: string;
+  createdAt: string;
+  title: string;
+  isSummarized: boolean;
+}
+
+interface RecentCounsel {
+  id: string;
+  date: string;
+  title: string;
+  isSummarized: boolean;
+}
+
+const formatDate = (iso: string) => {
+  const d = new Date(iso);
+  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+};
 
 export default function Home() {
   const navigate = useNavigate();
@@ -23,6 +44,8 @@ export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showGuide, setShowGuide] = useState(false);
   const [activeTab, setActiveTab] = useState<'plan' | 'subscribe'>('plan');
+  const [recentCounsels, setRecentCounsels] = useState<RecentCounsel[]>([]);
+  const [counselSlide, setCounselSlide] = useState(0);
 
   // 랜덤으로 5개 선택하는 함수
   const getRandomItems = <T,>(array: T[], count: number): T[] => {
@@ -88,6 +111,29 @@ export default function Home() {
     return () => clearInterval(timer);
   }, [slides.length]);
 
+  // 최근 상담 내역 불러오기
+  useEffect(() => {
+    const loadRecentCounsels = async () => {
+      try {
+        const res = await fetchCounselList({ page: 1, size: 3 });
+        const mapped: RecentCounsel[] = res.items
+          .filter((item: CounselApiItem) => item.isSummarized)
+          .slice(0, 3)
+          .map((item: CounselApiItem) => ({
+            id: item.sessionId,
+            date: formatDate(item.createdAt),
+            title: item.title,
+            isSummarized: item.isSummarized,
+          }));
+        setRecentCounsels(mapped);
+      } catch (e) {
+        console.error('최근 상담 내역 로드 실패', e);
+      }
+    };
+
+    loadRecentCounsels();
+  }, []);
+
   // 회원가입 후 가이드 표시
   useEffect(() => {
     if (location.state?.showGuide) {
@@ -103,6 +149,35 @@ export default function Home() {
 
   const handleChatClick = () => {
     navigate('/chat');
+  };
+
+  const handleCounselClick = async (sessionId: string) => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const res = await axios.get(
+        `${apiUrl}/summary/consults/${sessionId}/user`,
+        { withCredentials: true },
+      );
+
+      if (res.status === 200) {
+        navigate('/summary', { state: { summaryData: res.data.payload } });
+      }
+    } catch (e) {
+      console.error('요약 조회 실패', e);
+      alert('요약을 불러오지 못했습니다.');
+    }
+  };
+
+  const handlePrevCounsel = () => {
+    setCounselSlide((prev) =>
+      prev === 0 ? recentCounsels.length - 1 : prev - 1,
+    );
+  };
+
+  const handleNextCounsel = () => {
+    setCounselSlide((prev) =>
+      prev === recentCounsels.length - 1 ? 0 : prev + 1,
+    );
   };
 
   return (
@@ -134,8 +209,79 @@ export default function Home() {
 
         {/* 최근 상담 요약 */}
         <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>최근 상담 요약 &gt;</h2>
-          <div className={styles.emptyState}>최근 상담 내역이 없습니다</div>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>최근 상담 요약</h2>
+            <button
+              type="button"
+              className={styles.moreButton}
+              onClick={() => navigate('/counsel')}
+            >
+              더보기 &gt;
+            </button>
+          </div>
+
+          {recentCounsels.length === 0 ? (
+            <div className={styles.emptyState}>최근 상담 내역이 없습니다</div>
+          ) : (
+            <div className={styles.counselSliderWrapper}>
+              {recentCounsels.length > 1 && (
+                <button
+                  type="button"
+                  className={styles.counselArrowLeft}
+                  onClick={handlePrevCounsel}
+                  aria-label="이전 상담"
+                >
+                  ‹
+                </button>
+              )}
+
+              <div
+                className={styles.counselSliderTrack}
+                style={{
+                  transform: `translateX(-${counselSlide * 100}%)`,
+                }}
+              >
+                {recentCounsels.map((counsel) => (
+                  <button
+                    key={counsel.id}
+                    type="button"
+                    className={styles.counselCard}
+                    onClick={() => handleCounselClick(counsel.id)}
+                  >
+                    <div className={styles.counselDate}>{counsel.date}</div>
+                    <div className={styles.counselTitle}>{counsel.title}</div>
+                  </button>
+                ))}
+              </div>
+
+              {recentCounsels.length > 1 && (
+                <button
+                  type="button"
+                  className={styles.counselArrowRight}
+                  onClick={handleNextCounsel}
+                  aria-label="다음 상담"
+                >
+                  ›
+                </button>
+              )}
+
+              {recentCounsels.length > 1 && (
+                <div className={styles.counselDots}>
+                  {recentCounsels.map((counsel, index) => (
+                    <button
+                      key={counsel.id}
+                      type="button"
+                      className={
+                        counselSlide === index ? styles.dotActive : styles.dot
+                      }
+                      onClick={() => setCounselSlide(index)}
+                      aria-label={`상담 ${index + 1}로 이동`}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </section>
 
         {/* 이벤트 슬라이더 */}

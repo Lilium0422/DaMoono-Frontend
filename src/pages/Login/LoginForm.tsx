@@ -1,47 +1,47 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
-import logo from '@/assets/images/logo.png';
-import { login } from '@/services/authApi';
-import { PAGE_PATHS } from '@/shared/config/paths';
-import Layout from '../layout/Layout';
-import * as styles from './style/LoginForm.css';
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import logo from "@/assets/images/logo.png";
+import { login } from "@/services/authApi";
+import { PAGE_PATHS } from "@/shared/config/paths";
+import Layout from "../layout/Layout";
+import * as styles from "./style/LoginForm.css";
 
 export default function LoginForm() {
   const navigate = useNavigate();
-  const [userId, setUserId] = useState('');
-  const [password, setPassword] = useState('');
+  const [userId, setUserId] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
     if (!userId.trim() || !password) {
-      alert('아이디와 비밀번호를 입력해주세요.');
+      alert("아이디와 비밀번호를 입력해주세요.");
       return;
     }
 
     setIsLoading(true);
     try {
       const data = await login({ userId, password });
-      console.log('로그인 응답:', data);
-      console.log('Role:', data.data?.role);
+      console.log("로그인 응답:", data);
+      console.log("Role:", data.data?.role);
 
       if (data.success) {
         // 로그인 성공 시 사용자 정보 저장
-        console.log('로그인 데이터:', data);
-        console.log('저장할 userName:', data.data.name);
+        console.log("로그인 데이터:", data);
+        console.log("저장할 userName:", data.data.name);
 
-        localStorage.setItem('userId', data.data.userId);
-        localStorage.setItem('userName', data.data.name);
-        localStorage.setItem('userRole', data.data.role);
+        localStorage.setItem("userId", data.data.userId);
+        localStorage.setItem("userName", data.data.name);
+        localStorage.setItem("userRole", data.data.role);
 
-        console.log('저장 후 localStorage:', {
-          userId: localStorage.getItem('userId'),
-          userName: localStorage.getItem('userName'),
-          userRole: localStorage.getItem('userRole'),
+        console.log("저장 후 localStorage:", {
+          userId: localStorage.getItem("userId"),
+          userName: localStorage.getItem("userName"),
+          userRole: localStorage.getItem("userRole"),
         });
 
         // ADMIN이면 상담사 페이지로, 아니면 홈으로
-        if (data.data.role === 'ADMIN') {
-          navigate('/chat/admin');
+        if (data.data.role === "ADMIN") {
+          navigate("/chat/admin");
         } else {
           navigate(PAGE_PATHS.HOME);
         }
@@ -50,7 +50,7 @@ export default function LoginForm() {
       alert(
         error instanceof Error
           ? error.message
-          : '로그인 중 오류가 발생했습니다.',
+          : "로그인 중 오류가 발생했습니다.",
       );
     } finally {
       setIsLoading(false);
@@ -62,7 +62,7 @@ export default function LoginForm() {
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !isLoading) {
+    if (e.key === "Enter" && !isLoading) {
       handleLogin();
     }
   };
@@ -70,6 +70,14 @@ export default function LoginForm() {
   return (
     <Layout>
       <div className={styles.container}>
+        <button
+          type="button"
+          className={styles.backButton}
+          onClick={() => navigate(PAGE_PATHS.LOGIN)}
+        >
+          ‹ 돌아가기
+        </button>
+
         <div className={styles.logoContainer}>
           <img src={logo} alt="다무너 로고" className={styles.logo} />
         </div>
@@ -111,7 +119,7 @@ export default function LoginForm() {
             onClick={handleLogin}
             disabled={isLoading}
           >
-            {isLoading ? '로그인 중...' : '로그인'}
+            {isLoading ? "로그인 중..." : "로그인"}
           </button>
 
           <button
